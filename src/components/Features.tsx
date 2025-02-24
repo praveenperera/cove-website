@@ -6,37 +6,37 @@ const features = [
   {
     name: 'Simple hot wallets',
     description:
-      'Easy to get started with a hot wallet, with your bitcoin keys stored securely, encrypted on your device',
+      'Easily get started by making a hot wallet, with your bitcoin keys stored securely, encrypted locally on your device.',
     icon: DeviceLockIcon,
   },
   {
     name: 'Hardware wallet support',
     description:
-      'Use Cove with your Hardware Wallet. We have full support for PSBTs.',
+      'Use Cove with your Hardware Wallet. We have full support for PSBTs, which means we support most hardware wallets, including ColdCard, Jade and Trezor.',
     icon: ShieldIcon,
   },
   {
     name: 'QR & NFC Support',
     description:
-      'Easily sign transactions and import wallets using QR (BBQr) and/or NFC',
+      'Easily sign transactions and import wallets using QR (BBQr) and/or NFC.',
     icon: QrIcon,
   },
   {
     name: 'Keep track of your UTXOs',
     description:
-      'Cove supports the BIP329 label format, so you keep your transaction labels in sync with your other wallets, including Sparrow',
+      'Cove supports the BIP329 label format, so you can keep your transaction labels in sync with your other wallets, including Sparrow.',
     icon: LabelIcon,
   },
   {
     name: 'Decoy & Wipe PIN Protection',
     description:
-      'Set up decoy wallets or wipe PINs for protection against physical threats. Enter a special PIN to show a decoy wallet with minimal funds or completely wipe your wallet data.',
+      'Set up decoy wallets and/or wipe PINs for protection against physical threats. Enter a special PIN to show a decoy wallet with minimal funds or completely wipe your wallet data.',
     icon: DecoyIcon,
   },
   {
     name: 'Secure and Safe',
     description:
-      'Built on the popular and well tested Bitcoin Development Kit (BDK), fully open sourced and auditable code. Cove keeps your funds safe.',
+      'Built on the popular and well tested Bitcoin Development Kit (BDK), fully open sourced and auditable code.',
     icon: LockIcon,
   },
 ]
@@ -160,7 +160,7 @@ export function Features() {
             Cove does everything you need to make it your primary on-chain
             wallet. From basic transactions to advanced features like UTXO
             management and hardware wallet integration - all with best-in-class
-            security and complete self-custody of your Bitcoin
+            security.
           </p>
         </div>
         <ul

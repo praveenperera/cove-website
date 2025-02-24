@@ -17,7 +17,7 @@ export function CallToAction() {
             Try it out today!
           </h2>
           <p className="mt-4 text-lg text-gray-300">
-            Easy to get started, fully featured, whether its your first walllet
+            Easy to get started, fully featured, whether its your first wallet
             or you're a certified bitcoin OG. Cove is the wallet for you.
           </p>
           <div className="flex justify-center mt-8">
