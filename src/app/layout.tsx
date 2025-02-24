@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     default: 'Cove - The simple bitcoin only mobile wallet',
   },
   description:
-    'By leveraging insights from our network of industry insiders, you’ll know exactly when to buy to maximize profit, and exactly when to sell to avoid painful losses.',
+    'Cove is a Bitcoin only mobile wallet that is simple to use, but feature rich. Simple enough for users new to self custody, with all the features that experienced bitcoin users require.',
 }
 
 export default function RootLayout({
