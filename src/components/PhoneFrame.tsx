@@ -24,16 +24,17 @@ export function PhoneFrame({
   ...props
 }: React.ComponentPropsWithoutRef<'div'> & { priority?: boolean }) {
   return (
-    <div className={clsx('relative aspect-366/729', className)} {...props}>
-      <div className="absolute inset-y-[calc(1/729*100%)] right-[calc(5/729*100%)] left-[calc(7/729*100%)] rounded-[calc(58/366*100%)/calc(58/729*100%)] shadow-2xl" />
-      <div className="absolute top-[calc(23/729*100%)] left-[calc(23/366*100%)] grid h-[calc(686/729*100%)] w-[calc(318/366*100%)] transform grid-cols-1 overflow-hidden bg-gray-900 pt-[calc(23/318*100%)]">
-        {children}
+    <div className={clsx('relative aspect-[393/852]', className)} {...props}>
+      <div className="absolute top-[calc(42/852*100%)] left-[calc(16/393*100%)] grid h-[calc(730/852*100%)] w-[calc(360/393*100%)] transform grid-cols-1 overflow-hidden">
+        <div className="relative h-full w-full overflow-hidden rounded-[calc(47/393*100%)/calc(47/852*100%)]">
+          {children}
+        </div>
       </div>
-      <PlaceholderFrame className="pointer-events-none absolute inset-0 h-full w-full fill-gray-100" />
+      <div className="absolute inset-y-[calc(42/852*100%)] right-[calc(5/852*100%)] left-[calc(7/852*100%)] rounded-[calc(58/393*100%)/calc(58/852*100%)] shadow-2xl" />
       <Image
         src={frame}
         alt=""
-        className="pointer-events-none absolute inset-0 h-full w-full"
+        className="absolute inset-0 w-full h-full pointer-events-none"
         unoptimized
         priority={priority}
       />

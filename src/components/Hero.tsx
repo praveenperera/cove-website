@@ -1,8 +1,10 @@
 import { useId } from 'react'
-import { AppDemo } from '@/components/AppDemo'
 import { TestFlightLink } from '@/components/TestFlightLink'
 import { Container } from '@/components/Container'
 import { PhoneFrame } from '@/components/PhoneFrame'
+import Image from 'next/image'
+
+import mainScreen from '@/images/main_screen.jpeg'
 
 function BackgroundIllustration(props: React.ComponentPropsWithoutRef<'div'>) {
   let id = useId()
@@ -100,7 +102,7 @@ export function Hero() {
               feature rich. Simple enough for users new to self custody, with
               all the features that experienced bitcoin users require.
             </p>
-            <div className="flex flex-wrap gap-y-4 gap-x-6 mt-8">
+            <div className="mt-8">
               <TestFlightLink />
               {/* <AppStoreLink /> */}
               {/* <Button */}
@@ -115,8 +117,12 @@ export function Hero() {
           <div className="relative mt-10 sm:mt-20 lg:col-span-5 lg:row-span-2 lg:mt-0 xl:col-span-6">
             <BackgroundIllustration className="absolute top-4 left-1/2 h-[1026px] w-[1026px] -translate-x-1/3 stroke-gray-300/70 [mask-image:linear-gradient(to_bottom,white_20%,transparent_75%)] sm:top-16 sm:-translate-x-1/2 lg:-top-16 lg:ml-12 xl:-top-14 xl:ml-0" />
             <div className="-mx-4 h-[448px] px-9 [mask-image:linear-gradient(to_bottom,white_60%,transparent)] sm:mx-0 lg:absolute lg:-inset-x-10 lg:-top-10 lg:-bottom-20 lg:h-auto lg:px-0 lg:pt-10 xl:-bottom-32">
-              <PhoneFrame className="mx-auto max-w-[366px]" priority>
-                <AppDemo />
+              <PhoneFrame className="mx-auto max-w-[393px]" priority>
+                <Image
+                  src={mainScreen}
+                  alt="main wallet screenshot"
+                  className="mx-auto w-full max-w-[393px]"
+                />
               </PhoneFrame>
             </div>
           </div>

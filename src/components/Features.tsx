@@ -18,7 +18,7 @@ const features = [
   {
     name: 'QR & NFC Support',
     description:
-      'Easily sign transactions and import wallets uisng QR (BBQr) and/or NFC',
+      'Easily sign transactions and import wallets using QR (BBQr) and/or NFC',
     icon: QrIcon,
   },
   {
@@ -36,7 +36,7 @@ const features = [
   {
     name: 'Secure and Safe',
     description:
-      'Built on Bitcoin Development Kit (BDK) with encryption, fully open sources and auditable code. Your keys never leave your device.',
+      'Built on the popular and well tested Bitcoin Development Kit (BDK), fully open sourced and auditable code. Cove keeps your funds safe.',
     icon: LockIcon,
   },
 ]
@@ -147,8 +147,8 @@ function DecoyIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 export function Features() {
   return (
     <section
-      id="secondary-features"
-      aria-label="Features for building a portfolio"
+      id="features"
+      aria-label="Features for Cove"
       className="py-20 sm:py-32"
     >
       <Container>

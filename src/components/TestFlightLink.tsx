@@ -23,14 +23,18 @@ function buttonColor(color: string): string {
 export function TestFlightLink({ color = 'black' }: Args) {
   return (
     <Link
-      href="https://testflight.apple.com/join/pDxFQsxF"
+      href="https://TestFlight.apple.com/join/pDxFQsxF"
       aria-label="Join TestFlight Beta"
-      className={`inline-flex items-center space-x-2 rounded-lg px-4 py-2 font-semibold ${buttonColor(color)}`}
+      className={`flex w-full items-center space-x-2 rounded-lg px-4 py-2 text-center font-semibold sm:inline-flex sm:w-auto ${buttonColor(color)}`}
     >
-      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+      <svg
+        className="hidden w-5 h-5 sm:flex sm:w-5"
+        fill="currentColor"
+        viewBox="0 0 20 20"
+      >
         <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
       </svg>
-      <span className="pl-4">Join TestFlight Beta</span>
+      <span className="pl-4 w-full sm:w-auto">Join TestFlight Beta</span>
     </Link>
   )
 }

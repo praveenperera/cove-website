@@ -62,7 +62,7 @@ export function Header() {
         <Container className="flex relative z-50 justify-between py-8">
           <div className="flex relative z-10 gap-16 items-center">
             <Link href="/" aria-label="Home">
-              <Logo className="w-auto h-10" />
+              <Logo />
             </Link>
             <div className="hidden lg:flex lg:gap-10">
               <NavLinks />
@@ -111,14 +111,10 @@ export function Header() {
                             <MobileNavLink href="/#features">
                               Features
                             </MobileNavLink>
-                            <MobileNavLink href="/#reviews">
-                              Reviews
-                            </MobileNavLink>
-                            <MobileNavLink href="/#faqs">FAQs</MobileNavLink>
                           </div>
                           <div className="flex flex-col gap-4 mt-8">
-                            <Button href="https://testflight.apple.com/join/pDxFQsxF">
-                              Download the app
+                            <Button href="https://TestFlight.apple.com/join/pDxFQsxF">
+                              Join TestFlight Beta
                             </Button>
                           </div>
                         </PopoverPanel>
@@ -129,8 +125,8 @@ export function Header() {
               )}
             </Popover>
             <div className="flex gap-6 items-center max-lg:hidden">
-              <Button href="https://testflight.apple.com/join/pDxFQsxF">
-                Join Testflight Beta
+              <Button href="https://TestFlight.apple.com/join/pDxFQsxF">
+                Join TestFlight Beta
               </Button>
             </div>
           </div>
