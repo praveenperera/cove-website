@@ -25,7 +25,7 @@ export function TestFlightLink({ color = 'black' }: Args) {
     <Link
       href="https://TestFlight.apple.com/join/pDxFQsxF"
       aria-label="Join TestFlight Beta"
-      className={`flex w-full items-center space-x-2 rounded-lg px-4 py-2 text-center font-semibold sm:inline-flex sm:w-auto ${buttonColor(color)}`}
+      className={`items-center space-x-2 rounded-lg px-4 py-2 text-center font-semibold sm:inline-flex sm:w-auto ${buttonColor(color)}`}
     >
       <svg
         className="hidden w-5 h-5 sm:flex sm:w-5"

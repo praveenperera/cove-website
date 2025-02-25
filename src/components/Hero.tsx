@@ -5,6 +5,7 @@ import { PhoneFrame } from '@/components/PhoneFrame'
 import Image from 'next/image'
 
 import mainScreen from '@/images/main_screen.jpeg'
+import { Button } from './Button'
 
 function BackgroundIllustration(props: React.ComponentPropsWithoutRef<'div'>) {
   let id = useId()
@@ -102,16 +103,13 @@ export function Hero() {
               feature rich. Simple enough for users new to self custody, with
               all the features that experienced bitcoin users require.
             </p>
-            <div className="mt-8">
+            <div className="flex gap-x-4 mt-8 gap">
               <TestFlightLink />
               {/* <AppStoreLink /> */}
-              {/* <Button */}
-              {/*   href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" */}
-              {/*   variant="outline" */}
-              {/* > */}
-              {/*   <PlayIcon className="flex-none w-6 h-6" /> */}
-              {/*   <span className="ml-2.5">Watch the video</span> */}
-              {/* </Button> */}
+              <Button href="https://youtu.be/OpJlIDuOgzg" variant="outline">
+                <PlayIcon className="flex-none w-6 h-6" />
+                <span className="ml-2.5">Watch the video</span>
+              </Button>
             </div>
           </div>
           <div className="relative mt-10 sm:mt-20 lg:col-span-5 lg:row-span-2 lg:mt-0 xl:col-span-6">
