@@ -1,3 +1,5 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -5,6 +7,7 @@ import { Container } from '@/components/Container'
 import { NavLinks } from '@/components/NavLinks'
 import qrCode from '@/images/qr-code.svg'
 import logo from '@/images/cove_logo.jpg'
+import { useState, useEffect } from 'react'
 
 function QrCodeBorder(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -19,6 +22,12 @@ function QrCodeBorder(props: React.ComponentPropsWithoutRef<'svg'>) {
 }
 
 export function Footer() {
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
   return (
     <footer className="border-t border-gray-200">
       <Container>
@@ -59,6 +68,23 @@ export function Footer() {
           <p className="mt-6 text-sm text-gray-500 md:mt-0">
             &copy; Copyright {new Date().getFullYear()}. All rights reserved.
           </p>
+          {isClient ? (
+            <p>
+              <a
+                href="https://twitter.com/covewallet?ref_src=twsrc%5Etfw"
+                className="twitter-follow-button"
+                data-show-count="false"
+              >
+                Follow @covewallet
+              </a>
+              <script
+                async
+                src="https://platform.twitter.com/widgets.js"
+              ></script>
+            </p>
+          ) : (
+            <p>Follow on x @covewallet</p>
+          )}
         </div>
       </Container>
     </footer>
