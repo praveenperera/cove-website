@@ -99,13 +99,12 @@ export function Hero() {
               Cove, the simple Bitcoin wallet that puts you in control.
             </h1>
             <p className="mt-6 text-lg text-gray-600">
-              Cove is a Bitcoin only mobile wallet that is simple to use, but
-              feature rich. Simple enough for users new to self custody, with
-              all the features that experienced bitcoin users require.
+              Cove is a Bitcoin only mobile wallet. Simple to use and feature
+              rich, both new users and experienced bitcoiners will find a home
+              for their Bitcoin with Cove Wallet.
             </p>
             <div className="flex gap-x-4 mt-8 gap">
               <TestFlightLink />
-              {/* <AppStoreLink /> */}
               <Button href="https://youtu.be/OpJlIDuOgzg" variant="outline">
                 <PlayIcon className="flex-none w-6 h-6" />
                 <span className="ml-2.5">Watch the video</span>
