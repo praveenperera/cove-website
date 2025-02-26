@@ -105,7 +105,7 @@ export function Hero() {
             </p>
             <div className="flex gap-x-4 mt-8 gap">
               <TestFlightLink />
-              <Button href="https://youtu.be/OpJlIDuOgzg" variant="outline">
+              <Button href="https://youtu.be/-iK1DPdlgls" variant="outline">
                 <PlayIcon className="flex-none w-6 h-6" />
                 <span className="ml-2.5">Watch the video</span>
               </Button>
