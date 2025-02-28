@@ -103,9 +103,13 @@ export function Hero() {
               rich, both new users and experienced bitcoiners will find a home
               for their Bitcoin with Cove Wallet.
             </p>
-            <div className="flex gap-x-4 mt-8 gap">
+            <div className="flex flex-wrap mt-8 w-full sm:gap-x-4 sm:w-auto sm:gap">
               <TestFlightLink />
-              <Button href="https://youtu.be/-iK1DPdlgls" variant="outline">
+              <Button
+                href="https://youtu.be/-iK1DPdlgls"
+                variant="outline"
+                className="inline-flex mt-2 w-full sm:flex sm:mt-0 sm:w-auto"
+              >
                 <PlayIcon className="flex-none w-6 h-6" />
                 <span className="ml-2.5">Watch the video</span>
               </Button>
