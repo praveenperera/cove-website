@@ -8,6 +8,7 @@ import { NavLinks } from '@/components/NavLinks'
 import qrCode from '@/images/qr-code.svg'
 import logo from '@/images/cove_logo.jpg'
 import { useState, useEffect } from 'react'
+import { GitHubButton } from '@/components/Github'
 
 function QrCodeBorder(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -68,23 +69,25 @@ export function Footer() {
           <p className="mt-6 text-sm text-gray-500 md:mt-0">
             &copy; Copyright {new Date().getFullYear()}. All rights reserved.
           </p>
-          {isClient ? (
-            <p>
-              <a
-                href="https://twitter.com/covewallet?ref_src=twsrc%5Etfw"
-                className="twitter-follow-button"
-                data-show-count="false"
-              >
-                Follow @covewallet
-              </a>
-              <script
-                async
-                src="https://platform.twitter.com/widgets.js"
-              ></script>
-            </p>
-          ) : (
-            <p>Follow on x @covewallet</p>
-          )}
+          <div className="flex w-8/12">
+            {isClient ? (
+              <p>
+                <a
+                  href="https://twitter.com/covewallet?ref_src=twsrc%5Etfw"
+                  className="twitter-follow-button"
+                  data-show-count="false"
+                >
+                  Follow @covewallet
+                </a>
+                <script
+                  async
+                  src="https://platform.twitter.com/widgets.js"
+                ></script>
+              </p>
+            ) : (
+              <p>Follow on x @covewallet</p>
+            )}
+          </div>
         </div>
       </Container>
     </footer>

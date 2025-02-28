@@ -13,6 +13,7 @@ import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Logo } from '@/components/Logo'
 import { NavLinks } from '@/components/NavLinks'
+import { GitHubButton } from '@/components/Github'
 
 function MenuIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -113,6 +114,7 @@ export function Header() {
                             </MobileNavLink>
                           </div>
                           <div className="flex flex-col gap-4 mt-8">
+                            <GitHubButton href="https://github.com/bitcoinppl/cove" />
                             <Button href="https://TestFlight.apple.com/join/pDxFQsxF">
                               Join TestFlight Beta
                             </Button>
@@ -125,6 +127,7 @@ export function Header() {
               )}
             </Popover>
             <div className="flex gap-6 items-center max-lg:hidden">
+              <GitHubButton href="https://github.com/bitcoinppl/cove" />
               <Button href="https://TestFlight.apple.com/join/pDxFQsxF">
                 Join TestFlight Beta
               </Button>
