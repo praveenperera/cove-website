@@ -16,7 +16,7 @@ function BackgroundIllustration(props: React.ComponentPropsWithoutRef<'div'>) {
         viewBox="0 0 1026 1026"
         fill="none"
         aria-hidden="true"
-        className="absolute inset-0 w-full h-full animate-spin-slow"
+        className="absolute inset-0 h-full w-full animate-spin-slow"
       >
         <path
           d="M1025 513c0 282.77-229.23 512-512 512S1 795.77 1 513 230.23 1 513 1s512 229.23 512 512Z"
@@ -46,7 +46,7 @@ function BackgroundIllustration(props: React.ComponentPropsWithoutRef<'div'>) {
         viewBox="0 0 1026 1026"
         fill="none"
         aria-hidden="true"
-        className="absolute inset-0 w-full h-full animate-spin-reverse-slower"
+        className="absolute inset-0 h-full w-full animate-spin-reverse-slower"
       >
         <path
           d="M913 513c0 220.914-179.086 400-400 400S113 733.914 113 513s179.086-400 400-400 400 179.086 400 400Z"
@@ -94,7 +94,7 @@ export function Hero() {
     <div className="overflow-hidden py-20 sm:py-32 lg:pb-32 xl:pb-36">
       <Container>
         <div className="lg:grid lg:grid-cols-12 lg:gap-x-8 lg:gap-y-20">
-          <div className="relative z-10 mx-auto max-w-2xl lg:col-span-7 lg:pt-6 lg:max-w-none xl:col-span-6">
+          <div className="relative z-10 mx-auto max-w-2xl lg:col-span-7 lg:max-w-none lg:pt-6 xl:col-span-6">
             <h1 className="text-4xl font-medium tracking-tight text-gray-900">
               Cove, the simple Bitcoin wallet that puts you in control.
             </h1>
@@ -103,14 +103,14 @@ export function Hero() {
               rich, both new users and experienced bitcoiners will find a home
               for their Bitcoin with Cove Wallet.
             </p>
-            <div className="flex flex-wrap mt-8 w-full sm:gap-x-4 sm:w-auto sm:gap">
-              <TestFlightLink />
+            <div className="sm:gap mt-8 flex w-full flex-wrap sm:w-auto sm:gap-x-4">
+              <TestFlightLink className="text-sm" />
               <Button
                 href="https://youtu.be/-iK1DPdlgls"
                 variant="outline"
-                className="inline-flex mt-2 w-full sm:flex sm:mt-0 sm:w-auto"
+                className="mt-2 inline-flex w-full sm:mt-0 sm:flex sm:w-auto"
               >
-                <PlayIcon className="flex-none w-6 h-6" />
+                <PlayIcon className="h-6 w-6 flex-none" />
                 <span className="ml-2.5">Watch the video</span>
               </Button>
             </div>
