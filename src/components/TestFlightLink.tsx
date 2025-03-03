@@ -29,13 +29,13 @@ export function TestFlightLink({ color = 'black', className = '' }: Args) {
       className={`inline-flex w-full items-center space-x-2 rounded-lg px-4 py-2 text-center font-semibold sm:w-auto ${buttonColor(color)} ${className}`}
     >
       <svg
-        className="hidden h-5 w-5 sm:flex sm:w-5"
+        className="hidden h-5 w-5 pr-1 sm:flex sm:w-5"
         fill="currentColor"
         viewBox="0 0 20 20"
       >
         <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
       </svg>
-      <span className="w-full pl-4 sm:w-auto">Join TestFlight Beta</span>
+      <span className="w-full sm:w-auto">Join TestFlight Beta</span>
     </Link>
   )
 }
