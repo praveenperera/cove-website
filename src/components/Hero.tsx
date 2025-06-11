@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import { TestFlightLink } from '@/components/TestFlightLink'
+import { AppStoreLink } from '@/components/AppStoreLink'
 import { Container } from '@/components/Container'
 import { PhoneFrame } from '@/components/PhoneFrame'
 import Image from 'next/image'
@@ -104,7 +104,7 @@ export function Hero() {
               for their Bitcoin with Cove Wallet.
             </p>
             <div className="sm:gap mt-8 flex w-full flex-wrap sm:w-auto sm:gap-x-4">
-              <TestFlightLink className="text-sm" />
+              <AppStoreLink />
               <Button
                 href="https://youtu.be/-iK1DPdlgls"
                 variant="outline"

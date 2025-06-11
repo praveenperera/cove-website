@@ -1,6 +1,6 @@
 import { CircleBackground } from '@/components/CircleBackground'
 import { Container } from '@/components/Container'
-import { TestFlightLink } from './TestFlightLink'
+import { AppStoreLink } from './AppStoreLink'
 
 export function CallToAction() {
   return (
@@ -21,7 +21,7 @@ export function CallToAction() {
             or you're a certified bitcoin OG. Cove is the wallet for you.
           </p>
           <div className="flex justify-center mt-8">
-            <TestFlightLink color="white" />
+            <AppStoreLink color="white" />
           </div>
         </div>
       </Container>

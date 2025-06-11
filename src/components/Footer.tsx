@@ -54,13 +54,13 @@ export function Footer() {
             </div>
             <div className="ml-8 lg:w-64">
               <p className="text-base font-semibold text-gray-900 sm:flex">
-                <Link href="https://TestFlight.apple.com/join/pDxFQsxF">
+                <Link href="https://apps.apple.com/app/cove-simple-bitcoin-wallet/id6642680364">
                   <span className="absolute inset-0 sm:rounded-2xl" />
-                  Join TestFlight Beta
+                  Download on the App Store
                 </Link>
               </p>
               <p className="mt-1 text-sm text-gray-700">
-                Scan the QR code to download the app from TestFlight.
+                Scan the QR code to download the app from the App Store.
               </p>
             </div>
           </div>

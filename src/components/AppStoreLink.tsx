@@ -8,7 +8,7 @@ export function AppStoreLink({
 }) {
   return (
     <Link
-      href="#"
+      href="https://apps.apple.com/app/cove-simple-bitcoin-wallet/id6642680364"
       aria-label="Download on the App Store"
       className={clsx(
         'rounded-lg transition-colors',

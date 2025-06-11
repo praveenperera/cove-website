@@ -115,8 +115,8 @@ export function Header() {
                           </div>
                           <div className="flex flex-col gap-4 mt-8">
                             <GitHubButton href="https://github.com/bitcoinppl/cove" />
-                            <Button href="https://TestFlight.apple.com/join/pDxFQsxF">
-                              Join TestFlight Beta
+                            <Button href="https://apps.apple.com/app/cove-simple-bitcoin-wallet/id6642680364">
+                              Download on the App Store
                             </Button>
                           </div>
                         </PopoverPanel>
@@ -128,8 +128,8 @@ export function Header() {
             </Popover>
             <div className="flex gap-6 items-center max-lg:hidden">
               <GitHubButton href="https://github.com/bitcoinppl/cove" />
-              <Button href="https://TestFlight.apple.com/join/pDxFQsxF">
-                Join TestFlight Beta
+              <Button href="https://apps.apple.com/app/cove-simple-bitcoin-wallet/id6642680364">
+                Download on the App Store
               </Button>
             </div>
           </div>
