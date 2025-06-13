@@ -12,7 +12,7 @@ const features = [
   {
     name: 'Hardware wallet support',
     description:
-      'Use Cove with your Hardware Wallet. We have full support for PSBTs, which means we support most hardware wallets, including ColdCard, Jade and Trezor.',
+      'Use Cove with your Hardware Wallet. We have full support for PSBTs, which means we support most hardware wallets, including ColdCard, Krux and TAPSIGNER.',
     icon: ShieldIcon,
   },
   {
@@ -165,14 +165,14 @@ export function Features() {
         </div>
         <ul
           role="list"
-          className="grid grid-cols-1 gap-6 mx-auto mt-16 max-w-2xl text-sm sm:grid-cols-2 sm:mt-20 md:gap-y-10 lg:grid-cols-3 lg:max-w-none"
+          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-6 text-sm sm:mt-20 sm:grid-cols-2 md:gap-y-10 lg:max-w-none lg:grid-cols-3"
         >
           {features.map((feature) => (
             <li
               key={feature.name}
-              className="p-8 rounded-2xl border border-gray-200"
+              className="rounded-2xl border border-gray-200 p-8"
             >
-              {feature.icon && <feature.icon className="w-8 h-8" />}
+              {feature.icon && <feature.icon className="h-8 w-8" />}
               <h3 className="mt-6 font-semibold text-gray-900">
                 {feature.name}
               </h3>
