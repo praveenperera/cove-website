@@ -24,12 +24,17 @@ export const metadata: Metadata = {
       'Cove is a Bitcoin only mobile wallet that is simple to use, but feature rich.',
     url: 'https://covebitcoinwallet.com',
     siteName: 'Cove',
-    logo: '/cove_logo.jpg',
     images: [
       {
         url: '/big.jpg',
         width: 1200,
         height: 630,
+        alt: 'Cove Bitcoin Wallet Logo On Background',
+      },
+      {
+        url: '/cove_logo.jpg',
+        width: 2048,
+        height: 2048,
         alt: 'Cove Bitcoin Wallet Logo',
       },
     ],
@@ -41,7 +46,7 @@ export const metadata: Metadata = {
     title: 'Cove - The simple bitcoin only mobile wallet',
     description:
       'Cove is a Bitcoin only mobile wallet that is simple to use, but feature rich.',
-    images: ['/big.jpg'],
+    images: ['/big.jpg', '/cove_logo.jpg'],
     creator: '@praveenperera',
     site: '@covewallet',
   },
