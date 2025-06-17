@@ -11,7 +11,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://covewallet.com'),
+  metadataBase: new URL('https://covebitcoinwallet.com'),
   title: {
     template: '%s - Cove',
     default: 'Cove - The simple bitcoin only mobile wallet',
@@ -22,8 +22,9 @@ export const metadata: Metadata = {
     title: 'Cove - The simple bitcoin only mobile wallet',
     description:
       'Cove is a Bitcoin only mobile wallet that is simple to use, but feature rich.',
-    url: 'https://covewallet.com',
+    url: 'https://covebitcoinwallet.com',
     siteName: 'Cove',
+    logo: '/cove_logo.jpg',
     images: [
       {
         url: '/big.jpg',
