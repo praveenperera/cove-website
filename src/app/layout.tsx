@@ -42,7 +42,7 @@ export const metadata: Metadata = {
       'Cove is a Bitcoin only mobile wallet that is simple to use, but feature rich.',
     images: ['/big.jpg'],
     creator: '@praveenperera',
-    site: '@praveenperera',
+    site: '@covewallet',
   },
   keywords: [
     'cove',
