@@ -129,6 +129,9 @@ export function Header() {
                                 <path d="m44 18-10.4-6L22 22.4 33.7 34l10.2-6a5.8 5.8 0 0 0 .1-10Z" fill="#FBBC04" />
                               </svg>
                               Google Play
+                              <span className="rounded-full bg-orange-500 px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">
+                                BETA
+                              </span>
                             </Button>
                           </div>
                         </PopoverPanel>
@@ -146,15 +149,20 @@ export function Header() {
                 </svg>
                 App Store
               </Button>
-              <Button href="https://play.google.com/store/apps/details?id=org.bitcoinppl.cove" className="items-center gap-2">
-                <svg viewBox="0 0 50 56" fill="none" aria-hidden="true" className="h-4 w-4">
-                  <path d="M1.1 1.6 1 3v40l.2 1.4 22-22L1.1 1.6Z" fill="#4285F4" />
-                  <path d="m22.6 23 11-11L9.6 -1.9a5.8 5.8 0 0 0-8.5 3.4L22.6 23Z" fill="#34A853" />
-                  <path d="M22.4 21.8 1.1 44.4a5.7 5.7 0 0 0 8.5 3.5l24-13.8-11.2-12.3Z" fill="#EA4335" />
-                  <path d="m44 18-10.4-6L22 22.4 33.7 34l10.2-6a5.8 5.8 0 0 0 .1-10Z" fill="#FBBC04" />
-                </svg>
-                Google Play
-              </Button>
+              <div className="relative">
+                <Button href="https://play.google.com/store/apps/details?id=org.bitcoinppl.cove" className="items-center gap-2">
+                  <svg viewBox="0 0 50 56" fill="none" aria-hidden="true" className="h-4 w-4">
+                    <path d="M1.1 1.6 1 3v40l.2 1.4 22-22L1.1 1.6Z" fill="#4285F4" />
+                    <path d="m22.6 23 11-11L9.6 -1.9a5.8 5.8 0 0 0-8.5 3.4L22.6 23Z" fill="#34A853" />
+                    <path d="M22.4 21.8 1.1 44.4a5.7 5.7 0 0 0 8.5 3.5l24-13.8-11.2-12.3Z" fill="#EA4335" />
+                    <path d="m44 18-10.4-6L22 22.4 33.7 34l10.2-6a5.8 5.8 0 0 0 .1-10Z" fill="#FBBC04" />
+                  </svg>
+                  Google Play
+                </Button>
+                <span className="absolute -right-2 -top-2 rounded-full bg-orange-500 px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">
+                  BETA
+                </span>
+              </div>
             </div>
           </div>
         </Container>

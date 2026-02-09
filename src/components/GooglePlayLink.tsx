@@ -9,22 +9,23 @@ export function GooglePlayLink({
   const textFill = color === 'black' ? '#fff' : '#111827'
 
   return (
-    <Link
-      href="https://play.google.com/store/apps/details?id=org.bitcoinppl.cove"
-      aria-label="Get it on Google Play"
-      className={clsx(
-        'rounded-lg transition-colors',
-        color === 'black'
-          ? 'bg-gray-800 text-white hover:bg-gray-900'
-          : 'bg-white text-gray-900 hover:bg-gray-50',
-      )}
-    >
-      <svg
-        viewBox="0 0 270 80"
-        aria-hidden="true"
-        className="h-10"
-        fill="none"
+    <div className="relative inline-flex">
+      <Link
+        href="https://play.google.com/store/apps/details?id=org.bitcoinppl.cove"
+        aria-label="Get it on Google Play"
+        className={clsx(
+          'rounded-lg transition-colors',
+          color === 'black'
+            ? 'bg-gray-800 text-white hover:bg-gray-900'
+            : 'bg-white text-gray-900 hover:bg-gray-50',
+        )}
       >
+        <svg
+          viewBox="0 0 270 80"
+          aria-hidden="true"
+          className="h-10"
+          fill="none"
+        >
         {/* Play icon */}
         <path
           d="M20.1 18.6 20 20v40l.2 1.4 22-22-22-20.8Z"
@@ -100,6 +101,10 @@ export function GooglePlayLink({
           fill={textFill}
         />
       </svg>
-    </Link>
+      </Link>
+      <span className="absolute -right-2 -top-2 rounded-full bg-orange-500 px-1.5 py-0.5 text-[10px] font-bold leading-none text-white">
+        BETA
+      </span>
+    </div>
   )
 }
