@@ -76,14 +76,24 @@ export function Footer() {
               Privacy
             </Link>
           </p>
-          <Button
-            variant="solid"
-            color="blue"
-            href="https://twitter.com/covewallet?ref_src=twsrc%5Etfw"
-            className="text-xs"
-          >
-            Follow on x @covewallet
-          </Button>
+          <div className="flex gap-3">
+            <Button
+              variant="solid"
+              color="gray"
+              href="/api/donate"
+              className="text-xs"
+            >
+              Donate
+            </Button>
+            <Button
+              variant="solid"
+              color="blue"
+              href="https://twitter.com/covewallet?ref_src=twsrc%5Etfw"
+              className="text-xs"
+            >
+              Follow on x @covewallet
+            </Button>
+          </div>
         </div>
       </Container>
     </footer>
