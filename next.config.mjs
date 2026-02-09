@@ -1,3 +1,5 @@
+import withMdkCheckout from '@moneydevkit/nextjs/next-plugin'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async redirects() {
@@ -35,4 +37,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+export default withMdkCheckout(nextConfig)

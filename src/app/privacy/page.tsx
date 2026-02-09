@@ -114,8 +114,9 @@ export default function Privacy() {
             4. Crash Reports & Diagnostics
           </h2>
           <p className="text-base">
-            We rely solely on Apple’s built-in, opt-in crash reporting ("App
-            Analytics"). If you have disabled sharing with developers in iOS
+            We rely solely on Apple&apos;s built-in, opt-in crash reporting
+            (&ldquo;App Analytics&rdquo;). If you have disabled sharing with
+            developers in iOS
             settings, we receive no diagnostics. Reports provided by Apple are
             anonymized and contain no personal identifiers.
           </p>

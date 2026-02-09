@@ -154,7 +154,7 @@ export function Features() {
       <Container>
         <div className="mx-auto max-w-2xl sm:text-center">
           <h2 className="text-3xl font-medium tracking-tight text-gray-900">
-            Simple Doesn't Mean Limited.
+            Simple Doesn&apos;t Mean Limited.
           </h2>
           <p className="mt-2 text-lg text-gray-600">
             Cove does everything you need to make it your primary on-chain
