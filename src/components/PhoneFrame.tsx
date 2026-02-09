@@ -25,8 +25,8 @@ export function PhoneFrame({
 }: React.ComponentPropsWithoutRef<'div'> & { priority?: boolean }) {
   return (
     <div className={clsx('relative aspect-[393/852]', className)} {...props}>
-      <div className="absolute top-[calc(42/852*100%)] left-[calc(16/393*100%)] grid h-[calc(730/852*100%)] w-[calc(360/393*100%)] transform grid-cols-1 overflow-hidden">
-        <div className="relative h-full w-full overflow-hidden rounded-[calc(47/393*100%)/calc(47/852*100%)]">
+      <div className="absolute top-[calc(42/852*100%)] left-[calc(16/393*100%)] flex flex-col h-[calc(730/852*100%)] w-[calc(360/393*100%)] overflow-hidden">
+        <div className="relative h-full w-full overflow-hidden rounded-[calc(47/393*100%)/calc(47/852*100%)] isolate">
           {children}
         </div>
       </div>
