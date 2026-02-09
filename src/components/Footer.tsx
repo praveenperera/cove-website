@@ -53,14 +53,14 @@ export function Footer() {
               <Image src={qrCode} alt="" unoptimized />
             </div>
             <div className="ml-8 lg:w-64">
-              <p className="text-base font-semibold text-gray-900 sm:flex">
+              <p className="text-base font-semibold text-gray-900">
                 <Link href="https://apps.apple.com/app/cove-simple-bitcoin-wallet/id6642680364">
                   <span className="absolute inset-0 sm:rounded-2xl" />
-                  Download on the App Store
+                  Download the app
                 </Link>
               </p>
               <p className="mt-1 text-sm text-gray-700">
-                Scan the QR code to download the app from the App Store.
+                Scan the QR code to download the app.
               </p>
             </div>
           </div>

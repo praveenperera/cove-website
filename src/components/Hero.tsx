@@ -1,5 +1,6 @@
 import { useId } from 'react'
 import { AppStoreLink } from '@/components/AppStoreLink'
+import { GooglePlayLink } from '@/components/GooglePlayLink'
 import { Container } from '@/components/Container'
 import { PhoneFrame } from '@/components/PhoneFrame'
 import Image from 'next/image'
@@ -103,8 +104,9 @@ export function Hero() {
               rich, both new users and experienced bitcoiners will find a home
               for their Bitcoin with Cove Wallet.
             </p>
-            <div className="sm:gap mt-8 flex w-full flex-wrap sm:w-auto sm:gap-x-4">
+            <div className="mt-8 flex w-full flex-wrap gap-3 sm:w-auto sm:gap-x-4">
               <AppStoreLink />
+              <GooglePlayLink />
               <Button
                 href="https://youtu.be/-iK1DPdlgls"
                 variant="outline"

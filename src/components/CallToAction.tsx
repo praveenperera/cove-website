@@ -1,6 +1,7 @@
 import { CircleBackground } from '@/components/CircleBackground'
 import { Container } from '@/components/Container'
 import { AppStoreLink } from './AppStoreLink'
+import { GooglePlayLink } from './GooglePlayLink'
 
 export function CallToAction() {
   return (
@@ -20,8 +21,9 @@ export function CallToAction() {
             Easy to get started, fully featured, whether its your first wallet
             or you're a certified bitcoin OG. Cove is the wallet for you.
           </p>
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center gap-4 mt-8">
             <AppStoreLink color="white" />
+            <GooglePlayLink color="white" />
           </div>
         </div>
       </Container>
