@@ -2,12 +2,14 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
+import { useState, useEffect } from 'react'
+import { useCheckout, Checkout } from '@moneydevkit/nextjs'
 
 import { Container } from '@/components/Container'
 import { NavLinks } from '@/components/NavLinks'
 import qrCode from '@/images/qr-code.svg'
 import logo from '@/images/cove_logo.jpg'
-import { useState, useEffect } from 'react'
 import { Button } from '@/components/Button'
 
 function QrCodeBorder(props: React.ComponentPropsWithoutRef<'svg'>) {
@@ -24,10 +26,40 @@ function QrCodeBorder(props: React.ComponentPropsWithoutRef<'svg'>) {
 
 export function Footer() {
   const [isClient, setIsClient] = useState(false)
+  const [showDonate, setShowDonate] = useState(false)
+  const [checkoutId, setCheckoutId] = useState<string | null>(null)
+  const { createCheckout, isLoading } = useCheckout()
 
   useEffect(() => {
     setIsClient(true)
   }, [])
+
+  const handleDonate = async () => {
+    setShowDonate(true)
+    setCheckoutId(null)
+
+    const result = await createCheckout({
+      type: 'AMOUNT',
+      title: 'Donate to Cove',
+      description: 'Support the development of Cove bitcoin wallet',
+      amount: 500,
+      currency: 'USD',
+      successUrl: '/checkout/success',
+    })
+
+    if (result.error) {
+      setShowDonate(false)
+      return
+    }
+
+    const id = result.data.checkoutUrl.split('/').pop()
+    if (id) setCheckoutId(id)
+  }
+
+  const closeModal = () => {
+    setShowDonate(false)
+    setCheckoutId(null)
+  }
 
   return (
     <footer className="border-t border-gray-200">
@@ -80,8 +112,9 @@ export function Footer() {
             <Button
               variant="solid"
               color="gray"
-              href="/api/donate"
               className="text-xs"
+              onClick={handleDonate}
+              disabled={isLoading}
             >
               Donate
             </Button>
@@ -96,6 +129,35 @@ export function Footer() {
           </div>
         </div>
       </Container>
+
+      <Dialog open={showDonate} onClose={closeModal} className="relative z-50">
+        <DialogBackdrop className="fixed inset-0 bg-black/40" />
+        <div className="fixed inset-0 flex items-center justify-center p-4">
+          <DialogPanel className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Donate to Cove
+              </h3>
+              <button
+                onClick={closeModal}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                ✕
+              </button>
+            </div>
+            {checkoutId ? (
+              <Checkout id={checkoutId} />
+            ) : (
+              <div className="flex flex-col items-center justify-center py-12">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-gray-800" />
+                <p className="mt-4 text-sm text-gray-500">
+                  Creating checkout...
+                </p>
+              </div>
+            )}
+          </DialogPanel>
+        </div>
+      </Dialog>
     </footer>
   )
 }
