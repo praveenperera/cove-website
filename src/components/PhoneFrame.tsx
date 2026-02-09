@@ -25,8 +25,8 @@ export function PhoneFrame({
 }: React.ComponentPropsWithoutRef<'div'> & { priority?: boolean }) {
   return (
     <div className={clsx('relative aspect-[393/852]', className)} {...props}>
-      <div className="absolute top-[calc(42/852*100%)] left-[calc(16/393*100%)] flex flex-col h-[calc(730/852*100%)] w-[calc(360/393*100%)] overflow-hidden">
-        <div className="relative h-full w-full overflow-hidden rounded-[calc(47/393*100%)/calc(47/852*100%)] isolate">
+      <div className="absolute top-[calc(42/852*100%)] left-[calc(16/393*100%)] flex h-[calc(730/852*100%)] w-[calc(360/393*100%)] flex-col overflow-hidden">
+        <div className="relative isolate h-full w-full overflow-hidden rounded-[calc(47/393*100%)/calc(47/852*100%)]">
           {children}
         </div>
       </div>
@@ -34,7 +34,7 @@ export function PhoneFrame({
       <Image
         src={frame}
         alt=""
-        className="absolute inset-0 w-full h-full pointer-events-none"
+        className="pointer-events-none absolute inset-0 h-full w-full"
         unoptimized
         priority={priority}
       />

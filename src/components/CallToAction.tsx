@@ -7,9 +7,9 @@ export function CallToAction() {
   return (
     <section
       id="get-free-shares-today"
-      className="overflow-hidden relative py-20 bg-gray-900 sm:py-28"
+      className="relative overflow-hidden bg-gray-900 py-20 sm:py-28"
     >
-      <div className="absolute left-20 top-1/2 -translate-y-1/2 sm:left-1/2 sm:-translate-x-1/2">
+      <div className="absolute top-1/2 left-20 -translate-y-1/2 sm:left-1/2 sm:-translate-x-1/2">
         <CircleBackground color="#fff" className="animate-spin-slower" />
       </div>
       <Container className="relative">
@@ -21,7 +21,7 @@ export function CallToAction() {
             Easy to get started, fully featured, whether its your first wallet
             or you're a certified bitcoin OG. Cove is the wallet for you.
           </p>
-          <div className="flex justify-center gap-4 mt-8">
+          <div className="mt-8 flex justify-center gap-4">
             <AppStoreLink color="white" />
             <GooglePlayLink color="white" />
           </div>
