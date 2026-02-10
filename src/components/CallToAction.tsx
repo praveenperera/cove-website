@@ -19,7 +19,7 @@ export function CallToAction() {
           </h2>
           <p className="mt-4 text-lg text-gray-300">
             Easy to get started, fully featured, whether its your first wallet
-            or you're a certified bitcoin OG. Cove is the wallet for you.
+            or you&apos;re a certified bitcoin OG. Cove is the wallet for you.
           </p>
           <div className="mt-8 flex justify-center gap-4">
             <AppStoreLink color="white" />

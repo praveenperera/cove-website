@@ -2,12 +2,13 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 
 import { Container } from '@/components/Container'
 import { NavLinks } from '@/components/NavLinks'
+import { DonateModal } from '@/components/DonateModal'
 import qrCode from '@/images/qr-code.svg'
 import logo from '@/images/cove_logo.jpg'
-import { useState, useEffect } from 'react'
 import { Button } from '@/components/Button'
 
 function QrCodeBorder(props: React.ComponentPropsWithoutRef<'svg'>) {
@@ -24,6 +25,7 @@ function QrCodeBorder(props: React.ComponentPropsWithoutRef<'svg'>) {
 
 export function Footer() {
   const [isClient, setIsClient] = useState(false)
+  const [showDonate, setShowDonate] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
@@ -76,16 +78,28 @@ export function Footer() {
               Privacy
             </Link>
           </p>
-          <Button
-            variant="solid"
-            color="blue"
-            href="https://twitter.com/covewallet?ref_src=twsrc%5Etfw"
-            className="text-xs"
-          >
-            Follow on x @covewallet
-          </Button>
+          <div className="flex gap-3">
+            <Button
+              variant="solid"
+              color="gray"
+              className="text-xs"
+              onClick={() => setShowDonate(true)}
+            >
+              Donate
+            </Button>
+            <Button
+              variant="solid"
+              color="blue"
+              href="https://twitter.com/covewallet?ref_src=twsrc%5Etfw"
+              className="text-xs"
+            >
+              Follow on x @covewallet
+            </Button>
+          </div>
         </div>
       </Container>
+
+      <DonateModal open={showDonate} onClose={() => setShowDonate(false)} />
     </footer>
   )
 }
