@@ -94,7 +94,7 @@ export async function listFeatureProducts(): Promise<FeatureProduct[]> {
   const allProducts = response.data?.products ?? []
 
   return allProducts
-    .filter((product) => product.name.startsWith(FEATURE_PRODUCT_PREFIX))
+    .filter((product) => product.name.trim().startsWith(FEATURE_PRODUCT_PREFIX))
     .sort((a, b) => a.name.localeCompare(b.name))
 }
 

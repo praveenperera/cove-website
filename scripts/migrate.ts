@@ -18,10 +18,24 @@ async function main() {
   const migrationPath = resolve(scriptDir, '../migrations/0001_feature_votes.sql')
   const sql = readFileSync(migrationPath, 'utf-8')
 
-  const statements = sql
-    .split(';')
-    .map((s) => s.trim())
-    .filter((s) => s.length > 0)
+  // split on semicolons only outside of BEGIN...END blocks
+  const statements: string[] = []
+  let current = ''
+  let inBlock = false
+
+  for (const line of sql.split('\n')) {
+    const trimmed = line.trim().toUpperCase()
+    if (trimmed === 'BEGIN') inBlock = true
+    if (trimmed.startsWith('END;') || trimmed === 'END') inBlock = false
+
+    current += line + '\n'
+
+    if (!inBlock && line.trimEnd().endsWith(';')) {
+      const stmt = current.trim().replace(/;$/, '')
+      if (stmt.length > 0) statements.push(stmt)
+      current = ''
+    }
+  }
 
   console.log(`Running ${statements.length} statements from ${migrationPath}`)
 

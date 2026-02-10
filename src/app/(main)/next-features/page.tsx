@@ -20,7 +20,7 @@ function formatSats(sats: number) {
 }
 
 function displayName(name: string) {
-  return name.replace(/^Feature:\s*/i, '')
+  return name.trim().replace(/^Feature:\s*/i, '')
 }
 
 export default function NextFeaturesPage() {
