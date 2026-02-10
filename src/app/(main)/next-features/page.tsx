@@ -66,7 +66,7 @@ function LightningIcon({ className }: { className?: string }) {
 
 function LoadingSkeleton() {
   return (
-    <div className="mx-auto max-w-4xl">
+    <div className="mx-auto max-w-5xl">
       <div className="mb-10 h-20 animate-pulse rounded-xl bg-gray-200" />
       <div className="mb-8 grid gap-4 md:grid-cols-3">
         <div className="h-48 animate-pulse rounded-2xl bg-gray-200" />
@@ -92,21 +92,21 @@ function StatsBar({
   featureCount: number
 }) {
   return (
-    <div className="mb-10 rounded-xl border border-gray-200 bg-white px-6 py-4 shadow-sm">
+    <div className="mx-auto mb-8 max-w-5xl rounded-xl border border-gray-200 bg-white px-6 py-4 shadow-sm">
       <div className="flex items-center justify-center divide-x divide-gray-200">
-        <div className="px-6 text-center first:pl-0 last:pr-0">
+        <div className="px-5 text-center first:pl-0 last:pr-0">
           <p className="text-2xl font-bold tabular-nums text-gray-900 max-sm:text-lg">
             {formatSats(totalSats)}
           </p>
           <p className="text-sm text-gray-500">Total Sats</p>
         </div>
-        <div className="px-6 text-center first:pl-0 last:pr-0">
+        <div className="px-5 text-center first:pl-0 last:pr-0">
           <p className="text-2xl font-bold tabular-nums text-gray-900 max-sm:text-lg">
             {totalVotes}
           </p>
           <p className="text-sm text-gray-500">Votes</p>
         </div>
-        <div className="px-6 text-center first:pl-0 last:pr-0">
+        <div className="px-5 text-center first:pl-0 last:pr-0">
           <p className="text-2xl font-bold tabular-nums text-gray-900 max-sm:text-lg">
             {featureCount}
           </p>
@@ -136,7 +136,7 @@ function PodiumCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.08, duration: 0.4 }}
-      className={`group flex flex-col rounded-2xl p-6 ${podiumCardClasses(rank)}`}
+      className={`group flex min-h-[320px] flex-col rounded-2xl px-6 py-8 ${podiumCardClasses(rank)}`}
     >
       <div className="mb-3 flex items-center gap-3">
         <span
@@ -153,12 +153,12 @@ function PodiumCard({
       </h2>
 
       {feature.description && (
-        <p className="mt-1.5 line-clamp-2 text-sm text-gray-600 group-hover:line-clamp-none">
+        <p className="mt-1.5 text-sm text-gray-600">
           {feature.description}
         </p>
       )}
 
-      <div className="mt-auto pt-4">
+      <div className="mt-auto pt-6">
         <p className="text-2xl font-bold tabular-nums text-gray-900">
           {formatSats(feature.totalSats)}{' '}
           <span className="text-base font-medium text-gray-500">sats</span>
@@ -327,10 +327,10 @@ export default function NextFeaturesPage() {
   }
 
   return (
-    <Container className="py-20 sm:py-24">
-      <div className="mx-auto max-w-4xl">
+    <Container className="py-12 sm:py-16">
+      <div>
         {/* header */}
-        <div className="mb-8">
+        <div className="mb-6">
           <p className="text-sm font-semibold tracking-wide text-midnight-blue-600 uppercase">
             Roadmap Votes
           </p>
@@ -363,24 +363,18 @@ export default function NextFeaturesPage() {
 
         {!loading && !error && features.length > 0 && (
           <>
-            <StatsBar
-              totalSats={totalSats}
-              totalVotes={totalVotes}
-              featureCount={features.length}
-            />
-
             {/* podium section */}
             {hasPodium ? (
               <>
                 {/* desktop: 3-column podium with rank 1 elevated center */}
-                <div className="mb-8 hidden items-end gap-4 md:grid md:grid-cols-3">
+                <div className="mx-auto mb-8 hidden max-w-5xl gap-6 md:grid md:grid-cols-3">
                   <PodiumCard
                     feature={podiumFeatures[1]}
                     rank={2}
                     index={1}
                     onVote={() => openVoteModal(podiumFeatures[1])}
                   />
-                  <div className="pb-8">
+                  <div className="-mt-8">
                     <PodiumCard
                       feature={podiumFeatures[0]}
                       rank={1}
@@ -424,9 +418,15 @@ export default function NextFeaturesPage() {
               </div>
             )}
 
+            <StatsBar
+              totalSats={totalSats}
+              totalVotes={totalVotes}
+              featureCount={features.length}
+            />
+
             {/* remaining features */}
             {remainingFeatures.length > 0 && (
-              <div className="space-y-3">
+              <div className="mx-auto max-w-5xl space-y-3">
                 {remainingFeatures.map((feature, i) => (
                   <RankRow
                     key={feature.productId}
