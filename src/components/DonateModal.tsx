@@ -78,6 +78,7 @@ export function DonateModal({
   const [checkout, setCheckout] = useState<CheckoutData | null>(null)
   const [timeRemaining, setTimeRemaining] = useState('')
   const [copySuccess, setCopySuccess] = useState(false)
+  const [error, setError] = useState('')
 
   const presets = currency === 'USD' ? USD_PRESETS : SAT_PRESETS
 
@@ -162,16 +163,22 @@ export function DonateModal({
         expiresAt: data.invoice.expiresAt,
       })
       setStep('invoice')
-    } catch {
+    } catch (err) {
+      console.error('create_checkout failed:', err)
+      setError('Failed to create invoice. Please try again.')
       setStep('pick')
     }
   }
 
   const copyInvoice = useCallback(async () => {
     if (!checkout?.invoice) return
-    await navigator.clipboard.writeText(checkout.invoice)
-    setCopySuccess(true)
-    setTimeout(() => setCopySuccess(false), 2000)
+    try {
+      await navigator.clipboard.writeText(checkout.invoice)
+      setCopySuccess(true)
+      setTimeout(() => setCopySuccess(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy invoice:', err)
+    }
   }, [checkout])
 
   const handleClose = () => {
@@ -180,6 +187,7 @@ export function DonateModal({
       setStep('pick')
       setCheckout(null)
       setCopySuccess(false)
+      setError('')
       setCustomAmount('')
       setUseCustom(false)
     }, 200)
@@ -304,8 +312,17 @@ export function DonateModal({
                   </div>
                 )}
 
+                {error && (
+                  <p className="mb-3 text-center text-sm text-red-600">
+                    {error}
+                  </p>
+                )}
+
                 <button
-                  onClick={handleSubmit}
+                  onClick={() => {
+                    setError('')
+                    handleSubmit()
+                  }}
                   disabled={amount < minAmount}
                   className="w-full rounded-lg bg-gray-900 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-800 disabled:opacity-40"
                 >
