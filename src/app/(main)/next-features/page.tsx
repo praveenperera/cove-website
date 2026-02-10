@@ -5,23 +5,8 @@ import { motion } from 'framer-motion'
 
 import { Container } from '@/components/Container'
 import { FeatureVoteModal } from '@/components/FeatureVoteModal'
-
-type Feature = {
-  productId: string
-  name: string
-  description: string | null
-  totalSats: number
-  voteCount: number
-  lastVoteAt: string | null
-}
-
-function formatSats(sats: number) {
-  return new Intl.NumberFormat('en-US').format(sats)
-}
-
-function displayName(name: string) {
-  return name.trim().replace(/^Feature:\s*/i, '')
-}
+import { displayName, formatSats } from '@/lib/feature-votes/format'
+import type { Feature } from '@/lib/feature-votes/types'
 
 function timeAgo(isoDate: string | null): string | null {
   if (!isoDate) return null
