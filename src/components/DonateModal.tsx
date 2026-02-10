@@ -36,6 +36,25 @@ type CheckoutData = {
   expiresAt: string
 }
 
+type MdkResponse<T> = { data: T }
+
+type MdkCheckoutStatus = {
+  status: string
+  invoice?: { amountSatsReceived?: number | null } | null
+}
+
+type MdkCreatedCheckout = {
+  id: string
+  currency: string
+  invoiceAmountSats: number | null
+  invoice: {
+    invoice: string
+    amountSats: number | null
+    fiatAmount: number
+    expiresAt: string
+  }
+}
+
 type Step = 'pick' | 'loading' | 'invoice' | 'paid' | 'expired'
 
 async function postMdk<T>(
@@ -49,7 +68,7 @@ async function postMdk<T>(
   })
 
   if (!res.ok) throw new Error(`MDK request failed: ${res.status}`)
-  return res.json()
+  return (await res.json()) as T
 }
 
 export function DonateModal({
@@ -85,9 +104,10 @@ export function DonateModal({
 
     const interval = setInterval(async () => {
       try {
-        const { data } = await postMdk('get_checkout', {
-          checkoutId: checkout.id,
-        })
+        const { data } = await postMdk<MdkResponse<MdkCheckoutStatus>>(
+          'get_checkout',
+          { checkoutId: checkout.id },
+        )
 
         if (
           data.status === 'PAYMENT_RECEIVED' ||
@@ -132,21 +152,24 @@ export function DonateModal({
     setStep('loading')
 
     try {
-      const { data } = await postMdk('create_checkout', {
-        params: {
-          type: 'AMOUNT',
-          title: 'Donate to Cove',
-          description: 'Support the development of Cove bitcoin wallet',
-          amount,
-          currency,
-          successUrl: '/checkout/success',
+      const { data } = await postMdk<MdkResponse<MdkCreatedCheckout>>(
+        'create_checkout',
+        {
+          params: {
+            type: 'AMOUNT',
+            title: 'Donate to Cove',
+            description: 'Support the development of Cove bitcoin wallet',
+            amount,
+            currency,
+            successUrl: '/checkout/success',
+          },
         },
-      })
+      )
 
       setCheckout({
         id: data.id,
         invoice: data.invoice.invoice,
-        amountSats: data.invoice.amountSats ?? data.invoiceAmountSats,
+        amountSats: data.invoice.amountSats ?? data.invoiceAmountSats ?? 0,
         fiatAmount: data.invoice.fiatAmount,
         currency: data.currency,
         expiresAt: data.invoice.expiresAt,
