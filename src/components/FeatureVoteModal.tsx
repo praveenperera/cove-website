@@ -262,7 +262,9 @@ export function FeatureVoteModal({
         <DialogPanel className="w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-xl">
           <div className="flex items-center justify-between border-b border-gray-100 px-6 pt-5 pb-4">
             <h3 className="text-lg font-semibold text-gray-900">
-              {feature ? `Vote: ${feature.name}` : 'Vote'}
+              {feature
+                ? `Vote: ${feature.name.trim().replace(/^Feature:\s*/i, '')}`
+                : 'Vote'}
             </h3>
             <button
               onClick={handleClose}
@@ -302,7 +304,7 @@ export function FeatureVoteModal({
                       }}
                       className={`rounded-lg py-2.5 text-sm font-medium transition-colors ${
                         !useCustom && selectedAmount === preset
-                          ? 'bg-gray-900 text-white'
+                          ? 'bg-cyan-500 text-white'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
@@ -347,8 +349,16 @@ export function FeatureVoteModal({
                 <button
                   onClick={handleSubmit}
                   disabled={amount < 1 || !feature}
-                  className="w-full rounded-lg bg-gray-900 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-800 disabled:opacity-40"
+                  className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-cyan-500 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-cyan-600 disabled:opacity-40"
                 >
+                  <svg
+                    className="h-4 w-4"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M11.983 1.907a.75.75 0 00-1.292-.657l-8.5 9.5A.75.75 0 002.75 12h6.572l-1.305 6.093a.75.75 0 001.292.657l8.5-9.5A.75.75 0 0017.25 8h-6.572l1.305-6.093z" />
+                  </svg>
                   Continue {formatSats(amount)} sats
                 </button>
               </>
@@ -422,7 +432,7 @@ export function FeatureVoteModal({
                 </p>
                 <button
                   onClick={handleClose}
-                  className="mt-6 rounded-lg bg-gray-900 px-6 py-2 text-sm font-medium text-white hover:bg-gray-800"
+                  className="mt-6 rounded-lg bg-cyan-500 px-6 py-2 text-sm font-medium text-white hover:bg-cyan-600"
                 >
                   Done
                 </button>
@@ -436,7 +446,7 @@ export function FeatureVoteModal({
                 </p>
                 <button
                   onClick={() => setStep('pick')}
-                  className="rounded-lg bg-gray-900 px-6 py-2 text-sm font-medium text-white hover:bg-gray-800"
+                  className="rounded-lg bg-cyan-500 px-6 py-2 text-sm font-medium text-white hover:bg-cyan-600"
                 >
                   Start over
                 </button>
