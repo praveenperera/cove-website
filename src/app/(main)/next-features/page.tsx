@@ -193,56 +193,60 @@ function RankRow({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.24 + index * 0.08, duration: 0.4 }}
-      className="group flex items-center gap-4 rounded-xl border border-gray-100 bg-white px-4 py-3 shadow-sm"
+      className="group flex flex-col gap-4 rounded-xl border border-gray-100 bg-white px-4 py-4 shadow-sm md:flex-row md:items-center md:gap-4 md:py-3"
     >
-      <span
-        className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${rankBadgeClasses(rank)}`}
-      >
-        {rank}
-      </span>
+      <div className="flex items-start gap-3 md:min-w-0 md:flex-1 md:items-center md:gap-4">
+        <span
+          className={`mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold md:mt-0 ${rankBadgeClasses(rank)}`}
+        >
+          {rank}
+        </span>
 
-      <div className="min-w-0 flex-1">
-        <h2 className="truncate font-semibold text-gray-900">
-          {displayName(feature.name)}
-        </h2>
-        {feature.description && (
-          <p className="truncate text-xs text-gray-500 group-hover:whitespace-normal">
-            {feature.description}
-          </p>
-        )}
-        <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
-          <motion.div
-            className="h-full rounded-full bg-midnight-blue-700"
-            initial={{ width: 0 }}
-            animate={{ width: `${pct}%` }}
-            transition={{ delay: 0.3 + index * 0.05, duration: 0.6 }}
-          />
-        </div>
-      </div>
-
-      <div className="shrink-0 min-w-[100px] text-right">
-        <p className="text-sm font-semibold tabular-nums text-gray-900">
-          {formatSats(feature.totalSats)} sats
-        </p>
-        <div className="flex items-center justify-end gap-1.5 text-xs text-gray-500">
-          <span>
-            {feature.voteCount} vote{feature.voteCount === 1 ? '' : 's'}
-          </span>
-          {ago && (
-            <>
-              <span className="text-gray-300">&middot;</span>
-              <span>{ago}</span>
-            </>
+        <div className="min-w-0 flex-1 space-y-2.5 md:space-y-0">
+          <h2 className="font-semibold text-gray-900 md:truncate">
+            {displayName(feature.name)}
+          </h2>
+          {feature.description && (
+            <p className="text-xs leading-relaxed text-gray-500 md:truncate md:group-hover:whitespace-normal">
+              {feature.description}
+            </p>
           )}
+          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-gray-100 md:mt-1.5">
+            <motion.div
+              className="h-full rounded-full bg-midnight-blue-700"
+              initial={{ width: 0 }}
+              animate={{ width: `${pct}%` }}
+              transition={{ delay: 0.3 + index * 0.05, duration: 0.6 }}
+            />
+          </div>
         </div>
       </div>
 
-      <button
-        onClick={onVote}
-        className="shrink-0 rounded-lg bg-midnight-blue-700 px-3 py-1.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] hover:bg-midnight-blue-800 active:scale-[0.98]"
-      >
-        Vote
-      </button>
+      <div className="flex items-center justify-between gap-4 pl-10 md:justify-end md:pl-0">
+        <div className="shrink-0 md:min-w-[100px] md:text-right">
+          <p className="text-sm font-semibold tabular-nums text-gray-900">
+            {formatSats(feature.totalSats)} sats
+          </p>
+          <div className="flex items-center gap-1.5 text-xs text-gray-500 md:justify-end">
+            <span>
+              {feature.voteCount} vote{feature.voteCount === 1 ? '' : 's'}
+            </span>
+            {ago && (
+              <>
+                <span className="text-gray-300">&middot;</span>
+                <span>{ago}</span>
+              </>
+            )}
+          </div>
+        </div>
+
+        <button
+          onClick={onVote}
+          className="shrink-0 rounded-lg bg-midnight-blue-700 px-3 py-1.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] hover:bg-midnight-blue-800 active:scale-[0.98]"
+        >
+          Vote
+        </button>
+      </div>
     </motion.article>
   )
 }
