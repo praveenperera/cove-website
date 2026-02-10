@@ -92,7 +92,7 @@ function StatsBar({
   featureCount: number
 }) {
   return (
-    <div className="mx-auto mb-8 max-w-5xl rounded-xl border border-gray-200 bg-white px-6 py-4 shadow-sm">
+    <div className="mx-auto mb-10 max-w-5xl rounded-xl border border-gray-200 bg-white px-6 py-4 shadow-sm">
       <div className="flex items-center justify-center divide-x divide-gray-200">
         <div className="px-5 text-center first:pl-0 last:pr-0">
           <p className="text-2xl font-bold tabular-nums text-gray-900 max-sm:text-lg">
@@ -330,7 +330,7 @@ export default function NextFeaturesPage() {
     <Container className="py-12 sm:py-16">
       <div>
         {/* header */}
-        <div className="mb-6">
+        <div className="mb-20">
           <p className="text-sm font-semibold tracking-wide text-midnight-blue-600 uppercase">
             Roadmap Votes
           </p>
@@ -367,7 +367,7 @@ export default function NextFeaturesPage() {
             {hasPodium ? (
               <>
                 {/* desktop: 3-column podium with rank 1 elevated center */}
-                <div className="mx-auto mb-8 hidden max-w-5xl gap-6 md:grid md:grid-cols-3">
+                <div className="mx-auto mb-10 hidden max-w-5xl gap-6 md:grid md:grid-cols-3">
                   <PodiumCard
                     feature={podiumFeatures[1]}
                     rank={2}
@@ -426,7 +426,7 @@ export default function NextFeaturesPage() {
 
             {/* remaining features */}
             {remainingFeatures.length > 0 && (
-              <div className="mx-auto max-w-5xl space-y-3">
+              <div className="mx-auto max-w-5xl space-y-4">
                 {remainingFeatures.map((feature, i) => (
                   <RankRow
                     key={feature.productId}
