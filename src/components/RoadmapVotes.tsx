@@ -173,8 +173,8 @@ export function RoadmapVotes() {
             Vote on what Cove builds next
           </h2>
           <p className="mt-4 text-lg text-gray-300">
-            Every vote is a Lightning donation. The features with the most sats
-            get built first.
+            Every vote is a Lightning donation. Your sats help shape what gets
+            built next.
           </p>
         </div>
 
