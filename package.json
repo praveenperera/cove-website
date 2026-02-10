@@ -6,19 +6,21 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:migrate": "npx tsx scripts/migrate.ts"
   },
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
     "@headlessui/react": "^2.2",
+    "@libsql/client": "^0.17.0",
     "@moneydevkit/nextjs": "^0.9.0",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/postcss": "^4.1",
-    "@types/node": "^22",
+    "@types/node": "^25.2.3",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "clsx": "^2.1.0",
-    "framer-motion": "^11",
+    "framer-motion": "^12.34.0",
     "next": "^15",
     "react": "^19",
     "react-dom": "^19",
@@ -27,8 +29,8 @@
     "use-debounce": "^10.1"
   },
   "devDependencies": {
-    "eslint": "^8.56.0",
-    "eslint-config-next": "^15",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16",
     "prettier": "^3.8",
     "prettier-plugin-tailwindcss": "^0.7",
     "sharp": "^0.34"

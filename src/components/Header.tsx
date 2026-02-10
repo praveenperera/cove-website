@@ -112,6 +112,9 @@ export function Header() {
                             <MobileNavLink href="/#features">
                               Features
                             </MobileNavLink>
+                            <MobileNavLink href="/next-features">
+                              Vote Roadmap
+                            </MobileNavLink>
                           </div>
                           <div className="mt-8 flex flex-col gap-4">
                             <GitHubButton href="https://github.com/bitcoinppl/cove" />
