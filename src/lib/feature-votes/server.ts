@@ -121,9 +121,9 @@ export function extractCheckoutProductId(checkout: MdkCheckout): string | null {
 
 export function extractSettledSats(checkout: MdkCheckout): number {
   const satsCandidates = [
-    checkout.invoice?.amountSatsReceived,
-    checkout.invoiceAmountSats,
     checkout.invoice?.amountSats,
+    checkout.invoiceAmountSats,
+    checkout.invoice?.amountSatsReceived,
     checkout.providedAmount,
     checkout.totalAmount,
   ]
