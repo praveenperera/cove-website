@@ -1,6 +1,6 @@
 .next
 node_modules
 .env
+.dev.vars
+*.tsbuildinfo
 .claude/settings.local.json
-.open-next/
-.wrangler/

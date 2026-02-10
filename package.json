@@ -6,11 +6,13 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:migrate": "npx tsx scripts/migrate.ts"
   },
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
     "@headlessui/react": "^2.2",
+    "@libsql/client": "^0.14",
     "@moneydevkit/nextjs": "^0.9.0",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/postcss": "^4.1",
