@@ -146,8 +146,7 @@ export function DonateModal({
     if (step !== 'invoice' || !checkout) return
 
     const update = () => {
-      const diff =
-        new Date(checkout.expiresAt).getTime() - new Date().getTime()
+      const diff = new Date(checkout.expiresAt).getTime() - new Date().getTime()
       if (diff <= 0) {
         setTimeRemaining('Expired')
         setStep('expired')
@@ -233,7 +232,7 @@ export function DonateModal({
             </h3>
             <button
               onClick={handleClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-gray-400 transition-colors hover:text-gray-600"
               aria-label="Close"
             >
               <svg
@@ -252,11 +251,11 @@ export function DonateModal({
             </button>
           </div>
 
-          <div className="px-6 pb-6 pt-4">
+          <div className="px-6 pt-4 pb-6">
             {/* step 1: pick amount */}
             {step === 'pick' && (
               <>
-                <p className="text-sm text-gray-500 mb-4">
+                <p className="mb-4 text-sm text-gray-500">
                   Support the development of Cove bitcoin wallet
                 </p>
 
@@ -283,7 +282,7 @@ export function DonateModal({
                   ))}
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 mb-4 sm:grid-cols-3">
+                <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
                   {presets.map((p) => (
                     <button
                       key={p}
@@ -315,7 +314,7 @@ export function DonateModal({
                 {useCustom && (
                   <div className="mb-4">
                     <div className="flex items-center rounded-lg border border-gray-300 px-3 py-2.5">
-                      <span className="text-sm text-gray-400 mr-1">
+                      <span className="mr-1 text-sm text-gray-400">
                         {currency === 'USD' ? '$' : '₿'}
                       </span>
                       <input
@@ -330,10 +329,10 @@ export function DonateModal({
                         value={customAmount}
                         autoFocus
                         onChange={(e) => setCustomAmount(e.target.value)}
-                        className="flex-1 border-none bg-transparent text-sm text-gray-900 shadow-none outline-none ring-0 focus:border-none focus:outline-none focus:ring-0 placeholder:text-gray-400"
+                        className="flex-1 border-none bg-transparent text-sm text-gray-900 shadow-none ring-0 outline-none placeholder:text-gray-400 focus:border-none focus:ring-0 focus:outline-none"
                       />
                       {currency === 'SAT' && (
-                        <span className="text-sm text-gray-400 ml-1">sats</span>
+                        <span className="ml-1 text-sm text-gray-400">sats</span>
                       )}
                     </div>
                   </div>
@@ -375,7 +374,7 @@ export function DonateModal({
                   <p className="text-2xl font-semibold text-gray-900">
                     {formatSats(checkout.amountSats)} sats
                   </p>
-                  <p className="text-sm text-gray-400 mt-0.5">
+                  <p className="mt-0.5 text-sm text-gray-400">
                     {formatUsd(checkout.fiatAmount)} USD
                   </p>
                 </div>
@@ -477,7 +476,7 @@ export function DonateModal({
             {/* step 5: expired */}
             {step === 'expired' && (
               <div className="flex flex-col items-center py-8">
-                <p className="text-sm text-gray-500 mb-4">
+                <p className="mb-4 text-sm text-gray-500">
                   Invoice expired. Try again?
                 </p>
                 <button

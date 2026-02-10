@@ -89,10 +89,12 @@ export async function POST(request: Request) {
       handler: 'confirm_checkout',
       confirm: {
         checkoutId,
-        products: [{
-          productId: product.id,
-          priceAmount: amountSats,
-        }],
+        products: [
+          {
+            productId: product.id,
+            priceAmount: amountSats,
+          },
+        ],
       },
     })
 
@@ -111,7 +113,9 @@ export async function POST(request: Request) {
         invoice: checkout.invoice.invoice,
         expiresAt: checkout.invoice.expiresAt,
         amountSats:
-          checkout.invoice.amountSats ?? checkout.invoiceAmountSats ?? amountSats,
+          checkout.invoice.amountSats ??
+          checkout.invoiceAmountSats ??
+          amountSats,
         fiatAmount: checkout.invoice.fiatAmount,
         status: checkout.status,
       },

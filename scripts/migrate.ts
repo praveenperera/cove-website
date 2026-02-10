@@ -15,7 +15,10 @@ async function main() {
   const db = createClient({ url, authToken })
 
   const scriptDir = dirname(fileURLToPath(import.meta.url))
-  const migrationPath = resolve(scriptDir, '../migrations/0001_feature_votes.sql')
+  const migrationPath = resolve(
+    scriptDir,
+    '../migrations/0001_feature_votes.sql',
+  )
   const sql = readFileSync(migrationPath, 'utf-8')
 
   // split on semicolons only outside of BEGIN...END blocks

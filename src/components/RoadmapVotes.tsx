@@ -53,7 +53,7 @@ function FeatureCard({
       )}
 
       <div className="mt-auto">
-        <p className="text-xl font-bold tabular-nums text-white">
+        <p className="text-xl font-bold text-white tabular-nums">
           {formatSats(feature.totalSats)}{' '}
           <span className="text-sm font-medium text-gray-400">sats</span>
         </p>
@@ -84,10 +84,7 @@ function SkeletonCards() {
   return (
     <div className="mt-10 grid gap-4 sm:grid-cols-3">
       {[...Array(3)].map((_, i) => (
-        <div
-          key={i}
-          className="h-40 animate-pulse rounded-2xl bg-white/10"
-        />
+        <div key={i} className="h-40 animate-pulse rounded-2xl bg-white/10" />
       ))}
     </div>
   )
@@ -176,8 +173,8 @@ export function RoadmapVotes() {
             Vote on what Cove builds next
           </h2>
           <p className="mt-4 text-lg text-gray-300">
-            Every vote is a Lightning donation. The features with the most
-            sats get built first.
+            Every vote is a Lightning donation. The features with the most sats
+            get built first.
           </p>
         </div>
 
@@ -200,19 +197,19 @@ export function RoadmapVotes() {
         {!loading && features.length > 0 && (
           <div className="mx-auto mt-10 flex max-w-md items-center justify-center divide-x divide-white/10 text-center">
             <div className="px-5">
-              <p className="text-xl font-bold tabular-nums text-white">
+              <p className="text-xl font-bold text-white tabular-nums">
                 {formatSats(totalSats)}
               </p>
               <p className="text-xs text-gray-400">Total Sats</p>
             </div>
             <div className="px-5">
-              <p className="text-xl font-bold tabular-nums text-white">
+              <p className="text-xl font-bold text-white tabular-nums">
                 {totalVotes}
               </p>
               <p className="text-xs text-gray-400">Votes</p>
             </div>
             <div className="px-5">
-              <p className="text-xl font-bold tabular-nums text-white">
+              <p className="text-xl font-bold text-white tabular-nums">
                 {features.length}
               </p>
               <p className="text-xs text-gray-400">Features</p>

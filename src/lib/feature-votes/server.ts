@@ -54,9 +54,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
 }
 
-export async function callMdk<T>(
-  payload: Record<string, unknown>,
-): Promise<T> {
+export async function callMdk<T>(payload: Record<string, unknown>): Promise<T> {
   const accessToken = process.env.MDK_ACCESS_TOKEN
 
   if (!accessToken) {
@@ -183,7 +181,12 @@ export async function insertFeatureVoteEvent(params: {
 
 export async function getVoteTotalsByProductId(
   productIds: string[],
-): Promise<Map<string, { totalSats: number; voteCount: number; lastVoteAt: string | null }>> {
+): Promise<
+  Map<
+    string,
+    { totalSats: number; voteCount: number; lastVoteAt: string | null }
+  >
+> {
   const totals = new Map<
     string,
     { totalSats: number; voteCount: number; lastVoteAt: string | null }

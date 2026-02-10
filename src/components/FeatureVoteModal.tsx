@@ -131,9 +131,9 @@ export function FeatureVoteModal({
           body: JSON.stringify({ checkoutId: checkout.id }),
         })
 
-        const confirmJson = (await confirmRes
-          .json()
-          .catch(() => ({}))) as { error?: string }
+        const confirmJson = (await confirmRes.json().catch(() => ({}))) as {
+          error?: string
+        }
 
         if (!confirmRes.ok) {
           throw new Error(confirmJson?.error || 'Failed to record vote')
@@ -154,8 +154,7 @@ export function FeatureVoteModal({
     if (step !== 'invoice' || !checkout) return
 
     const update = () => {
-      const diff =
-        new Date(checkout.expiresAt).getTime() - new Date().getTime()
+      const diff = new Date(checkout.expiresAt).getTime() - new Date().getTime()
 
       if (diff <= 0) {
         setTimeRemaining('Expired')
@@ -286,7 +285,7 @@ export function FeatureVoteModal({
             </button>
           </div>
 
-          <div className="px-6 pb-6 pt-4">
+          <div className="px-6 pt-4 pb-6">
             {step === 'pick' && (
               <>
                 <p className="mb-4 text-sm text-gray-500">
@@ -333,8 +332,10 @@ export function FeatureVoteModal({
                         placeholder="Sats (e.g. 10000)"
                         value={customAmount}
                         autoFocus
-                        onChange={(event) => setCustomAmount(event.target.value)}
-                        className="flex-1 border-none bg-transparent text-sm text-gray-900 shadow-none outline-none ring-0 placeholder:text-gray-400 focus:border-none focus:outline-none focus:ring-0"
+                        onChange={(event) =>
+                          setCustomAmount(event.target.value)
+                        }
+                        className="flex-1 border-none bg-transparent text-sm text-gray-900 shadow-none ring-0 outline-none placeholder:text-gray-400 focus:border-none focus:ring-0 focus:outline-none"
                       />
                       <span className="ml-1 text-sm text-gray-400">sats</span>
                     </div>
@@ -342,7 +343,9 @@ export function FeatureVoteModal({
                 )}
 
                 {error && (
-                  <p className="mb-3 text-center text-sm text-red-600">{error}</p>
+                  <p className="mb-3 text-center text-sm text-red-600">
+                    {error}
+                  </p>
                 )}
 
                 <button
@@ -366,7 +369,9 @@ export function FeatureVoteModal({
             {step === 'loading' && (
               <div className="flex flex-col items-center justify-center py-12">
                 <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-gray-800" />
-                <p className="mt-4 text-sm text-gray-500">Generating invoice...</p>
+                <p className="mt-4 text-sm text-gray-500">
+                  Generating invoice...
+                </p>
               </div>
             )}
 
@@ -404,7 +409,9 @@ export function FeatureVoteModal({
                   {copySuccess ? 'Copied!' : 'Copy invoice'}
                 </button>
 
-                <p className="mt-3 text-xs text-gray-400">Expires in {timeRemaining}</p>
+                <p className="mt-3 text-xs text-gray-400">
+                  Expires in {timeRemaining}
+                </p>
               </div>
             )}
 
@@ -425,7 +432,9 @@ export function FeatureVoteModal({
                     />
                   </svg>
                 </div>
-                <p className="text-lg font-semibold text-gray-900">Vote recorded!</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  Vote recorded!
+                </p>
                 <p className="mt-1 text-sm text-gray-500">
                   Thanks for supporting this feature.
                 </p>

@@ -80,19 +80,19 @@ function StatsBar({
     <div className="mx-auto mb-10 max-w-5xl rounded-xl border border-gray-200 bg-white px-6 py-4 shadow-sm">
       <div className="flex items-center justify-center divide-x divide-gray-200">
         <div className="px-5 text-center first:pl-0 last:pr-0">
-          <p className="text-2xl font-bold tabular-nums text-gray-900 max-sm:text-lg">
+          <p className="text-2xl font-bold text-gray-900 tabular-nums max-sm:text-lg">
             {formatSats(totalSats)}
           </p>
           <p className="text-sm text-gray-500">Total Sats</p>
         </div>
         <div className="px-5 text-center first:pl-0 last:pr-0">
-          <p className="text-2xl font-bold tabular-nums text-gray-900 max-sm:text-lg">
+          <p className="text-2xl font-bold text-gray-900 tabular-nums max-sm:text-lg">
             {totalVotes}
           </p>
           <p className="text-sm text-gray-500">Votes</p>
         </div>
         <div className="px-5 text-center first:pl-0 last:pr-0">
-          <p className="text-2xl font-bold tabular-nums text-gray-900 max-sm:text-lg">
+          <p className="text-2xl font-bold text-gray-900 tabular-nums max-sm:text-lg">
             {featureCount}
           </p>
           <p className="text-sm text-gray-500">Features</p>
@@ -138,13 +138,11 @@ function PodiumCard({
       </h2>
 
       {feature.description && (
-        <p className="mt-1.5 text-sm text-gray-600">
-          {feature.description}
-        </p>
+        <p className="mt-1.5 text-sm text-gray-600">{feature.description}</p>
       )}
 
       <div className="mt-auto pt-6">
-        <p className="text-2xl font-bold tabular-nums text-gray-900">
+        <p className="text-2xl font-bold text-gray-900 tabular-nums">
           {formatSats(feature.totalSats)}{' '}
           <span className="text-base font-medium text-gray-500">sats</span>
         </p>
@@ -224,7 +222,7 @@ function RankRow({
 
       <div className="flex items-center justify-between gap-4 pl-10 md:justify-end md:pl-0">
         <div className="shrink-0 md:min-w-[100px] md:text-right">
-          <p className="text-sm font-semibold tabular-nums text-gray-900">
+          <p className="text-sm font-semibold text-gray-900 tabular-nums">
             {formatSats(feature.totalSats)} sats
           </p>
           <div className="flex items-center gap-1.5 text-xs text-gray-500 md:justify-end">
