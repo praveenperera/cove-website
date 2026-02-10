@@ -38,24 +38,13 @@ type CheckoutData = {
 
 type Step = 'pick' | 'loading' | 'invoice' | 'paid' | 'expired'
 
-async function postMdk(handler: string, payload: Record<string, unknown>) {
-  // set CSRF cookie
-  let token = document.cookie
-    .split(';')
-    .find((c) => c.trim().startsWith('mdk_csrf='))
-    ?.split('=')[1]
-
-  if (!token) {
-    token = crypto.randomUUID()
-    document.cookie = `mdk_csrf=${token}; path=/; SameSite=Lax`
-  }
-
+async function postMdk<T>(
+  handler: string,
+  payload: Record<string, unknown>,
+): Promise<T> {
   const res = await fetch('/api/mdk', {
     method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-moneydevkit-csrf-token': token,
-    },
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ handler, ...payload }),
   })
 
