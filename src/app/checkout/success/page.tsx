@@ -29,7 +29,7 @@ export default function SuccessPage() {
       <p className="text-2xl font-semibold text-gray-900">
         Thank you for your donation!
       </p>
-      <Link href="/" className="text-cyan-600 underline hover:text-cyan-700">
+      <Link href="/" className="text-midnight-blue-600 underline hover:text-midnight-blue-700">
         Back to home
       </Link>
     </div>

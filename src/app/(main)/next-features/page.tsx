@@ -37,7 +37,7 @@ function timeAgo(isoDate: string | null): string | null {
 
 function rankBadgeClasses(rank: number) {
   if (rank === 1) return 'bg-amber-400 text-white'
-  if (rank === 2) return 'bg-gray-400 text-white'
+  if (rank === 2) return 'bg-blue-400 text-white'
   if (rank === 3) return 'bg-orange-400 text-white'
   return 'border-2 border-gray-200 text-gray-500'
 }
@@ -45,9 +45,9 @@ function rankBadgeClasses(rank: number) {
 function podiumCardClasses(rank: number) {
   if (rank === 1)
     return 'border-2 border-amber-200 bg-gradient-to-b from-amber-50/80 to-white shadow-lg'
-  if (rank === 2) return 'border border-gray-200 bg-white shadow-md'
-  if (rank === 3)
-    return 'border border-orange-200 bg-gradient-to-b from-orange-50/60 to-white shadow-md'
+  if (rank === 2)
+    return 'border border-blue-200 bg-gradient-to-b from-blue-50/60 to-white shadow-md'
+  if (rank === 3) return 'border border-gray-200 bg-white shadow-sm'
   return 'border border-gray-200 bg-white shadow-sm'
 }
 
@@ -136,7 +136,7 @@ function PodiumCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.08, duration: 0.4 }}
-      className={`flex flex-col rounded-2xl p-6 ${podiumCardClasses(rank)}`}
+      className={`group flex flex-col rounded-2xl p-6 ${podiumCardClasses(rank)}`}
     >
       <div className="mb-3 flex items-center gap-3">
         <span
@@ -153,7 +153,7 @@ function PodiumCard({
       </h2>
 
       {feature.description && (
-        <p className="mt-1.5 line-clamp-2 text-sm text-gray-600">
+        <p className="mt-1.5 line-clamp-2 text-sm text-gray-600 group-hover:line-clamp-none">
           {feature.description}
         </p>
       )}
@@ -178,7 +178,7 @@ function PodiumCard({
 
       <button
         onClick={onVote}
-        className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-lg bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] hover:bg-cyan-600 active:scale-[0.98]"
+        className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-lg bg-midnight-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] hover:bg-midnight-blue-800 active:scale-[0.98]"
       >
         <LightningIcon className="h-4 w-4" />
         Vote with sats
@@ -208,7 +208,7 @@ function RankRow({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.24 + index * 0.08, duration: 0.4 }}
-      className="flex items-center gap-4 rounded-xl border border-gray-100 bg-white px-4 py-3 shadow-sm"
+      className="group flex items-center gap-4 rounded-xl border border-gray-100 bg-white px-4 py-3 shadow-sm"
     >
       <span
         className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${rankBadgeClasses(rank)}`}
@@ -221,13 +221,13 @@ function RankRow({
           {displayName(feature.name)}
         </h2>
         {feature.description && (
-          <p className="truncate text-xs text-gray-500">
+          <p className="truncate text-xs text-gray-500 group-hover:whitespace-normal">
             {feature.description}
           </p>
         )}
         <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
           <motion.div
-            className="h-full rounded-full bg-cyan-500"
+            className="h-full rounded-full bg-midnight-blue-700"
             initial={{ width: 0 }}
             animate={{ width: `${pct}%` }}
             transition={{ delay: 0.3 + index * 0.05, duration: 0.6 }}
@@ -254,7 +254,7 @@ function RankRow({
 
       <button
         onClick={onVote}
-        className="shrink-0 rounded-lg bg-cyan-500 px-3 py-1.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] hover:bg-cyan-600 active:scale-[0.98]"
+        className="shrink-0 rounded-lg bg-midnight-blue-700 px-3 py-1.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] hover:bg-midnight-blue-800 active:scale-[0.98]"
       >
         Vote
       </button>
@@ -331,7 +331,7 @@ export default function NextFeaturesPage() {
       <div className="mx-auto max-w-4xl">
         {/* header */}
         <div className="mb-8">
-          <p className="text-sm font-semibold tracking-wide text-cyan-600 uppercase">
+          <p className="text-sm font-semibold tracking-wide text-midnight-blue-600 uppercase">
             Roadmap Votes
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -380,7 +380,7 @@ export default function NextFeaturesPage() {
                     index={1}
                     onVote={() => openVoteModal(podiumFeatures[1])}
                   />
-                  <div className="-mt-4">
+                  <div className="pb-8">
                     <PodiumCard
                       feature={podiumFeatures[0]}
                       rank={1}

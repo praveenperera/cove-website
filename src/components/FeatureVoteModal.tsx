@@ -304,7 +304,7 @@ export function FeatureVoteModal({
                       }}
                       className={`rounded-lg py-2.5 text-sm font-medium transition-colors ${
                         !useCustom && selectedAmount === preset
-                          ? 'bg-cyan-500 text-white'
+                          ? 'bg-midnight-blue-700 text-white'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
@@ -349,7 +349,7 @@ export function FeatureVoteModal({
                 <button
                   onClick={handleSubmit}
                   disabled={amount < 1 || !feature}
-                  className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-cyan-500 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-cyan-600 disabled:opacity-40"
+                  className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-midnight-blue-700 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-midnight-blue-800 disabled:opacity-40"
                 >
                   <svg
                     className="h-4 w-4"
@@ -432,7 +432,7 @@ export function FeatureVoteModal({
                 </p>
                 <button
                   onClick={handleClose}
-                  className="mt-6 rounded-lg bg-cyan-500 px-6 py-2 text-sm font-medium text-white hover:bg-cyan-600"
+                  className="mt-6 rounded-lg bg-midnight-blue-700 px-6 py-2 text-sm font-medium text-white hover:bg-midnight-blue-800"
                 >
                   Done
                 </button>
@@ -446,7 +446,7 @@ export function FeatureVoteModal({
                 </p>
                 <button
                   onClick={() => setStep('pick')}
-                  className="rounded-lg bg-cyan-500 px-6 py-2 text-sm font-medium text-white hover:bg-cyan-600"
+                  className="rounded-lg bg-midnight-blue-700 px-6 py-2 text-sm font-medium text-white hover:bg-midnight-blue-800"
                 >
                   Start over
                 </button>
