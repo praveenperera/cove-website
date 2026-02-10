@@ -38,10 +38,7 @@ export async function GET() {
     console.error('feature vote leaderboard failed:', error)
     return NextResponse.json(
       {
-        error:
-          error instanceof Error
-            ? error.message
-            : 'Failed to load feature leaderboard',
+        error: 'Failed to load feature leaderboard',
       },
       { status: 500 },
     )

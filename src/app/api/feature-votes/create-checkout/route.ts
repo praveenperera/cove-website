@@ -120,10 +120,7 @@ export async function POST(request: Request) {
     console.error('feature vote create-checkout failed:', error)
     return NextResponse.json(
       {
-        error:
-          error instanceof Error
-            ? error.message
-            : 'Failed to create feature vote checkout',
+        error: 'Failed to create feature vote checkout',
       },
       { status: 500 },
     )
