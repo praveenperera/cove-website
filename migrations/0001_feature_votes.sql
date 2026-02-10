@@ -22,7 +22,7 @@ BEGIN
   ON CONFLICT(product_id) DO UPDATE SET
     total_sats = total_sats + NEW.settled_sats,
     vote_count = vote_count + 1,
-    last_vote_at = NEW.recorded_at;
+    last_vote_at = MAX(feature_vote_totals.last_vote_at, NEW.recorded_at);
 END;
 
 CREATE INDEX IF NOT EXISTS idx_feature_vote_totals_total_sats

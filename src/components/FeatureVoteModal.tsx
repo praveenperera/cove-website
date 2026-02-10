@@ -81,7 +81,8 @@ export function FeatureVoteModal({
 
   const amount = useMemo(() => {
     if (!useCustom) return selectedAmount
-    return Math.round(parseFloat(customAmount || '0'))
+    const parsed = parseFloat(customAmount || '0')
+    return Number.isFinite(parsed) ? Math.round(parsed) : 0
   }, [customAmount, selectedAmount, useCustom])
 
   useEffect(() => {
