@@ -84,8 +84,8 @@ export function DonateModal({
 
   const amount = useCustom
     ? currency === 'USD'
-      ? Math.round(parseFloat(customAmount || '0') * 100)
-      : Math.round(parseFloat(customAmount || '0'))
+      ? Math.round((parseFloat(customAmount) || 0) * 100)
+      : Math.round(parseFloat(customAmount) || 0)
     : selectedAmount
 
   const minAmount = currency === 'USD' ? 100 : 1
