@@ -235,7 +235,7 @@ function RankRow({
         </div>
       </div>
 
-      <div className="shrink-0 text-right">
+      <div className="shrink-0 min-w-[100px] text-right">
         <p className="text-sm font-semibold tabular-nums text-gray-900">
           {formatSats(feature.totalSats)} sats
         </p>
