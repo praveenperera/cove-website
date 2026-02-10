@@ -338,8 +338,8 @@ export default function NextFeaturesPage() {
             Vote on what Cove builds next
           </h1>
           <p className="mt-3 max-w-2xl text-base text-gray-600">
-            Each vote is a sats donation. The leaderboard is ranked by total
-            sats contributed per feature.
+            Every vote is a donation. The leaderboard is ranked by total sats
+            contributed per feature.
           </p>
         </div>
 
