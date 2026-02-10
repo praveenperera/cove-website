@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import { Container } from '@/components/Container'
 import { NavLinks } from '@/components/NavLinks'
@@ -24,12 +24,7 @@ function QrCodeBorder(props: React.ComponentPropsWithoutRef<'svg'>) {
 }
 
 export function Footer() {
-  const [isClient, setIsClient] = useState(false)
   const [showDonate, setShowDonate] = useState(false)
-
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
 
   return (
     <footer className="border-t border-gray-200">
