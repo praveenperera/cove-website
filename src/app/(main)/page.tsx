@@ -1,6 +1,7 @@
 import { CallToAction } from '@/components/CallToAction'
-import { Hero } from '@/components/Hero'
 import { Features } from '@/components/Features'
+import { Hero } from '@/components/Hero'
+import { RoadmapVotes } from '@/components/RoadmapVotes'
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <Hero />
       <CallToAction />
       <Features />
+      <RoadmapVotes />
     </>
   )
 }

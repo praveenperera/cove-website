@@ -4,6 +4,8 @@ import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import { QRCodeSVG } from 'qrcode.react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
+import { formatSats } from '@/lib/feature-votes/format'
+
 const SAT_PRESETS = [1000, 5000, 10000, 25000, 100000]
 
 type CheckoutData = {
@@ -21,10 +23,6 @@ type Feature = {
 }
 
 type Step = 'pick' | 'loading' | 'invoice' | 'paid' | 'expired'
-
-function formatSats(sats: number) {
-  return new Intl.NumberFormat('en-US').format(sats)
-}
 
 function formatUsd(cents: number) {
   return `$${(cents / 100).toFixed(cents % 100 === 0 ? 0 : 2)}`
