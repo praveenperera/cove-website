@@ -222,7 +222,7 @@ export function RoadmapVotes() {
 
         <div className="mt-10 flex justify-center">
           <Link
-            href="/next-features"
+            href="/roadmap"
             className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100"
           >
             View Full Roadmap

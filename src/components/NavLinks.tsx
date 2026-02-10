@@ -5,7 +5,7 @@ import Link from 'next/link'
 export function NavLinks() {
   const links = [
     ['Features', '/#features'],
-    ['Vote Roadmap', '/next-features'],
+    ['Vote Roadmap', '/roadmap'],
   ] as const
 
   return links.map(([label, href]) => (

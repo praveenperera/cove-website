@@ -68,7 +68,7 @@ export async function POST(request: Request) {
       params: {
         type: 'PRODUCTS',
         product: product.id,
-        successUrl: '/next-features',
+        successUrl: '/roadmap',
         metadata: {
           voteType: 'feature',
           featureProductId: product.id,

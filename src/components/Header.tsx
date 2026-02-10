@@ -112,7 +112,7 @@ export function Header() {
                             <MobileNavLink href="/#features">
                               Features
                             </MobileNavLink>
-                            <MobileNavLink href="/next-features">
+                            <MobileNavLink href="/roadmap">
                               Vote Roadmap
                             </MobileNavLink>
                           </div>

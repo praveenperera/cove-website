@@ -40,6 +40,11 @@ const nextConfig = {
           'https://apps.apple.com/app/cove-simple-bitcoin-wallet/id6642680364',
         permanent: true,
       },
+      {
+        source: '/next-features',
+        destination: '/roadmap',
+        permanent: true,
+      },
     ]
   },
 }

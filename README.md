@@ -38,7 +38,7 @@ Set the `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` environment variables to you
 
 ## Feature Vote Leaderboard
 
-The page is available at `/next-features`.
+The page is available at `/roadmap`.
 
 - Products are loaded from MDK and filtered to names starting with `Feature:`.
 - Voting uses SAT custom amounts.
