@@ -242,7 +242,6 @@ export function DonateModal({
                         setSelectedAmount(
                           c === 'USD' ? USD_PRESETS[0] : SAT_PRESETS[0],
                         )
-                        setUseCustom(false)
                         setCustomAmount('')
                       }}
                       className={`flex-1 rounded-md py-1.5 text-xs font-medium transition-colors ${
