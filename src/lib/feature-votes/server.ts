@@ -15,6 +15,14 @@ export type FeatureProduct = {
   }>
 }
 
+type MdkInvoice = {
+  invoice: string
+  expiresAt: string
+  amountSats: number | null
+  amountSatsReceived: number | null
+  fiatAmount: number | null
+}
+
 export type MdkCheckout = {
   id: string
   status: string
@@ -22,13 +30,7 @@ export type MdkCheckout = {
   product?: { id: string } | null
   products?: Array<{ id: string }> | null
   userMetadata?: Record<string, unknown> | null
-  invoice?: {
-    invoice: string
-    expiresAt: string
-    amountSats: number | null
-    amountSatsReceived: number | null
-    fiatAmount: number | null
-  } | null
+  invoice?: MdkInvoice | null
   invoiceAmountSats?: number | null
   providedAmount?: number | null
   totalAmount?: number | null
@@ -110,13 +112,10 @@ export function extractCheckoutProductId(checkout: MdkCheckout): string | null {
   const firstProduct = checkout.products?.[0]
   if (firstProduct?.id) return firstProduct.id
 
-  const metadata = checkout.userMetadata
-  const featureProductId =
-    metadata && typeof metadata.featureProductId === 'string'
-      ? metadata.featureProductId
-      : null
+  const featureProductId = checkout.userMetadata?.featureProductId
+  if (typeof featureProductId === 'string') return featureProductId
 
-  return featureProductId
+  return null
 }
 
 export function extractSettledSats(checkout: MdkCheckout): number {
@@ -144,13 +143,17 @@ export function isPaidCheckout(checkout: MdkCheckout): boolean {
   )
 }
 
-export async function insertFeatureVoteEvent(params: {
+type FeatureVoteEventParams = {
   checkoutId: string
   productId: string
   settledSats: number
   checkoutStatus: string
   rawCheckout: MdkCheckout
-}): Promise<boolean> {
+}
+
+export async function insertFeatureVoteEvent(
+  params: FeatureVoteEventParams,
+): Promise<boolean> {
   const db = getDb()
   const recordedAt = new Date().toISOString()
 
