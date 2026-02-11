@@ -8,7 +8,7 @@ import { FeatureVoteModal } from '@/components/FeatureVoteModal'
 import { displayName, formatSats } from '@/lib/feature-votes/format'
 import type { Feature, FeatureCardProps } from '@/lib/feature-votes/types'
 
-type RankRowProps = FeatureCardProps & { maxSats: number }
+type RankRowProps = FeatureCardProps & { podiumThreshold: number }
 
 type StatsBarProps = {
   totalSats: number
@@ -66,9 +66,9 @@ function LoadingSkeleton() {
         <div className="h-48 animate-pulse rounded-2xl bg-gray-200" />
         <div className="h-48 animate-pulse rounded-2xl bg-gray-200" />
       </div>
-      <div className="space-y-3">
-        {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-16 animate-pulse rounded-xl bg-gray-100" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="h-60 animate-pulse rounded-2xl bg-gray-100" />
         ))}
       </div>
     </div>
@@ -160,8 +160,17 @@ function PodiumCard({ feature, rank, index, onVote }: FeatureCardProps) {
   )
 }
 
-function RankRow({ feature, rank, index, maxSats, onVote }: RankRowProps) {
-  const pct = maxSats > 0 ? (feature.totalSats / maxSats) * 100 : 0
+function RankRow({
+  feature,
+  rank,
+  index,
+  podiumThreshold,
+  onVote,
+}: RankRowProps) {
+  const pct =
+    podiumThreshold > 0
+      ? Math.min((feature.totalSats / podiumThreshold) * 100, 100)
+      : 0
   const ago = timeAgo(feature.lastVoteAt)
 
   return (
@@ -169,60 +178,59 @@ function RankRow({ feature, rank, index, maxSats, onVote }: RankRowProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.24 + index * 0.08, duration: 0.4 }}
-      className="group flex flex-col gap-4 rounded-xl border border-gray-100 bg-white px-4 py-4 shadow-sm md:flex-row md:items-center md:gap-4 md:py-3"
+      className="group flex min-h-[240px] flex-col rounded-2xl border border-gray-100 bg-white px-5 py-5 shadow-sm"
     >
-      <div className="flex items-start gap-3 md:min-w-0 md:flex-1 md:items-center md:gap-4">
+      <div className="mb-2 flex items-center gap-3">
         <span
-          className={`mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold md:mt-0 ${rankBadgeClasses(rank)}`}
+          className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${rankBadgeClasses(rank)}`}
         >
           {rank}
         </span>
+        <h2 className="font-semibold text-gray-900">
+          {displayName(feature.name)}
+        </h2>
+      </div>
 
-        <div className="min-w-0 flex-1 space-y-2.5 md:space-y-0">
-          <h2 className="font-semibold text-gray-900 md:truncate">
-            {displayName(feature.name)}
-          </h2>
-          {feature.description && (
-            <p className="text-xs leading-relaxed text-gray-500 md:truncate md:group-hover:whitespace-normal">
-              {feature.description}
-            </p>
+      {feature.description && (
+        <p className="text-xs leading-relaxed text-gray-500">
+          {feature.description}
+        </p>
+      )}
+
+      <div className="mt-auto pt-4">
+        <p className="text-sm font-semibold text-gray-900 tabular-nums">
+          {formatSats(feature.totalSats)}{' '}
+          <span className="text-xs font-medium text-gray-500">sats</span>
+        </p>
+        <div className="mt-1 flex items-center gap-1.5 text-xs text-gray-500">
+          <span>
+            {feature.voteCount} vote{feature.voteCount === 1 ? '' : 's'}
+          </span>
+          {ago && (
+            <>
+              <span className="text-gray-300">&middot;</span>
+              <span>{ago}</span>
+            </>
           )}
-          <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-gray-100 md:mt-1.5">
-            <motion.div
-              className="h-full rounded-full bg-midnight-blue-700"
-              initial={{ width: 0 }}
-              animate={{ width: `${pct}%` }}
-              transition={{ delay: 0.3 + index * 0.05, duration: 0.6 }}
-            />
-          </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-4 pl-10 md:justify-end md:pl-0">
-        <div className="shrink-0 md:min-w-[100px] md:text-right">
-          <p className="text-sm font-semibold text-gray-900 tabular-nums">
-            {formatSats(feature.totalSats)} sats
-          </p>
-          <div className="flex items-center gap-1.5 text-xs text-gray-500 md:justify-end">
-            <span>
-              {feature.voteCount} vote{feature.voteCount === 1 ? '' : 's'}
-            </span>
-            {ago && (
-              <>
-                <span className="text-gray-300">&middot;</span>
-                <span>{ago}</span>
-              </>
-            )}
-          </div>
-        </div>
-
-        <button
-          onClick={onVote}
-          className="shrink-0 rounded-lg bg-midnight-blue-700 px-3 py-1.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] hover:bg-midnight-blue-800 active:scale-[0.98]"
-        >
-          Vote
-        </button>
+      <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+        <motion.div
+          className="h-full rounded-full bg-midnight-blue-700"
+          initial={{ width: 0 }}
+          animate={{ width: `${pct}%` }}
+          transition={{ delay: 0.3 + index * 0.05, duration: 0.6 }}
+        />
       </div>
+
+      <button
+        onClick={onVote}
+        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg bg-midnight-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all hover:scale-[1.02] hover:bg-midnight-blue-800 active:scale-[0.98]"
+      >
+        <LightningIcon className="h-4 w-4" />
+        Vote with sats
+      </button>
     </motion.article>
   )
 }
@@ -277,8 +285,8 @@ export default function NextFeaturesPage() {
     [features],
   )
 
-  const maxSats = useMemo(
-    () => Math.max(1, ...features.map((f) => f.totalSats)),
+  const podiumThreshold = useMemo(
+    () => (features.length >= 3 ? features[2].totalSats : 0),
     [features],
   )
 
@@ -391,14 +399,14 @@ export default function NextFeaturesPage() {
 
             {/* remaining features */}
             {remainingFeatures.length > 0 && (
-              <div className="mx-auto max-w-5xl space-y-4">
+              <div className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {remainingFeatures.map((feature, i) => (
                   <RankRow
                     key={feature.productId}
                     feature={feature}
                     rank={i + 4}
                     index={i}
-                    maxSats={maxSats}
+                    podiumThreshold={podiumThreshold}
                     onVote={() => openVoteModal(feature)}
                   />
                 ))}
