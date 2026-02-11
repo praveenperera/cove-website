@@ -6,7 +6,15 @@ import { motion } from 'framer-motion'
 import { Container } from '@/components/Container'
 import { FeatureVoteModal } from '@/components/FeatureVoteModal'
 import { displayName, formatSats } from '@/lib/feature-votes/format'
-import type { Feature } from '@/lib/feature-votes/types'
+import type { Feature, FeatureCardProps } from '@/lib/feature-votes/types'
+
+type RankRowProps = FeatureCardProps & { maxSats: number }
+
+type StatsBarProps = {
+  totalSats: number
+  totalVotes: number
+  featureCount: number
+}
 
 function timeAgo(isoDate: string | null): string | null {
   if (!isoDate) return null
@@ -67,15 +75,7 @@ function LoadingSkeleton() {
   )
 }
 
-function StatsBar({
-  totalSats,
-  totalVotes,
-  featureCount,
-}: {
-  totalSats: number
-  totalVotes: number
-  featureCount: number
-}) {
+function StatsBar({ totalSats, totalVotes, featureCount }: StatsBarProps) {
   return (
     <div className="mx-auto mb-10 max-w-5xl rounded-xl border border-gray-200 bg-white px-6 py-4 shadow-sm">
       <div className="flex items-center justify-center divide-x divide-gray-200">
@@ -102,17 +102,7 @@ function StatsBar({
   )
 }
 
-function PodiumCard({
-  feature,
-  rank,
-  index,
-  onVote,
-}: {
-  feature: Feature
-  rank: number
-  index: number
-  onVote: () => void
-}) {
+function PodiumCard({ feature, rank, index, onVote }: FeatureCardProps) {
   const badgeSize = rank === 1 ? 'h-9 w-9 text-sm' : 'h-8 w-8 text-sm'
   const ago = timeAgo(feature.lastVoteAt)
 
@@ -170,19 +160,7 @@ function PodiumCard({
   )
 }
 
-function RankRow({
-  feature,
-  rank,
-  index,
-  maxSats,
-  onVote,
-}: {
-  feature: Feature
-  rank: number
-  index: number
-  maxSats: number
-  onVote: () => void
-}) {
+function RankRow({ feature, rank, index, maxSats, onVote }: RankRowProps) {
   const pct = maxSats > 0 ? (feature.totalSats / maxSats) * 100 : 0
   const ago = timeAgo(feature.lastVoteAt)
 

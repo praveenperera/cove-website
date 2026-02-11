@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import { Container } from '@/components/Container'
 import { FeatureVoteModal } from '@/components/FeatureVoteModal'
 import { displayName, formatSats } from '@/lib/feature-votes/format'
-import type { Feature } from '@/lib/feature-votes/types'
+import type { Feature, FeatureCardProps } from '@/lib/feature-votes/types'
 
 function rankBadgeClasses(rank: number) {
   if (rank === 1) return 'bg-amber-400 text-gray-900'
@@ -16,17 +16,7 @@ function rankBadgeClasses(rank: number) {
   return 'bg-white/10 text-white'
 }
 
-function FeatureCard({
-  feature,
-  rank,
-  index,
-  onVote,
-}: {
-  feature: Feature
-  rank: number
-  index: number
-  onVote: () => void
-}) {
+function FeatureCard({ feature, rank, index, onVote }: FeatureCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}

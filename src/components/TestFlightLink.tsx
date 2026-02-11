@@ -6,15 +6,15 @@ type Args = {
 }
 
 function buttonColor(color: string): string {
-  if (color == 'black') {
+  if (color === 'black') {
     return 'bg-gray-800 hover:bg-gray-700 text-white'
   }
 
-  if (color == 'white') {
+  if (color === 'white') {
     return 'bg-white hover:bg-gray-100 text-gray-900'
   }
 
-  if (color == 'blue') {
+  if (color === 'blue') {
     return 'bg-blue-800 hover:bg-blue-700 text-white'
   }
 

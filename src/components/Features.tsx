@@ -1,5 +1,3 @@
-import { useId } from 'react'
-
 import { Container } from '@/components/Container'
 
 const features = [
@@ -59,8 +57,6 @@ function ShieldIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 }
 
 function QrIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
-  let id = useId()
-
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

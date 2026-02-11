@@ -2,7 +2,9 @@
 
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import { QRCodeSVG } from 'qrcode.react'
-import { useState, useEffect, useCallback } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+
+import { postMdk } from '@/lib/mdk-client'
 
 const USD_PRESETS = [100, 500, 1000, 2500, 5000]
 const SAT_PRESETS = [1000, 5000, 10000, 25000, 100000]
@@ -15,11 +17,6 @@ function formatUsd(cents: number) {
 
 function formatSats(sats: number) {
   return new Intl.NumberFormat('en-US').format(sats)
-}
-
-function formatPreset(amount: number, currency: Currency) {
-  if (currency === 'SAT') return `${formatSats(amount)} sats`
-  return formatUsd(amount)
 }
 
 function formatAmount(amount: number, currency: Currency) {
@@ -55,45 +52,14 @@ type MdkCreatedCheckout = {
   }
 }
 
-type Step = 'pick' | 'loading' | 'invoice' | 'paid' | 'expired'
-
-function getCsrfToken(): string {
-  const existing = document.cookie
-    .split(';')
-    .find((c) => c.trim().startsWith('mdk_csrf='))
-    ?.split('=')[1]
-
-  if (existing) return existing
-
-  const token = crypto.randomUUID()
-  document.cookie = `mdk_csrf=${token}; path=/; SameSite=Lax`
-  return token
-}
-
-async function postMdk<T>(
-  handler: string,
-  payload: Record<string, unknown>,
-): Promise<T> {
-  const res = await fetch('/api/mdk', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-moneydevkit-csrf-token': getCsrfToken(),
-    },
-    body: JSON.stringify({ handler, ...payload }),
-  })
-
-  if (!res.ok) throw new Error(`MDK request failed: ${res.status}`)
-  return (await res.json()) as T
-}
-
-export function DonateModal({
-  open,
-  onClose,
-}: {
+type DonateModalProps = {
   open: boolean
   onClose: () => void
-}) {
+}
+
+type Step = 'pick' | 'loading' | 'invoice' | 'paid' | 'expired'
+
+export function DonateModal({ open, onClose }: DonateModalProps) {
   const [step, setStep] = useState<Step>('pick')
   const [currency, setCurrency] = useState<Currency>('USD')
   const [selectedAmount, setSelectedAmount] = useState(USD_PRESETS[0])
@@ -106,11 +72,12 @@ export function DonateModal({
 
   const presets = currency === 'USD' ? USD_PRESETS : SAT_PRESETS
 
-  const amount = useCustom
-    ? currency === 'USD'
-      ? Math.round((parseFloat(customAmount) || 0) * 100)
-      : Math.round(parseFloat(customAmount) || 0)
-    : selectedAmount
+  const amount = useMemo(() => {
+    if (!useCustom) return selectedAmount
+    const parsed = parseFloat(customAmount) || 0
+    if (currency === 'USD') return Math.round(parsed * 100)
+    return Math.round(parsed)
+  }, [useCustom, selectedAmount, customAmount, currency])
 
   const minAmount = currency === 'USD' ? 100 : 1
 
@@ -296,7 +263,7 @@ export function DonateModal({
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                       }`}
                     >
-                      {formatPreset(p, currency)}
+                      {formatAmount(p, currency)}
                     </button>
                   ))}
                   <button

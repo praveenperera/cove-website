@@ -5,6 +5,8 @@ import { QRCodeSVG } from 'qrcode.react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { formatSats } from '@/lib/feature-votes/format'
+import type { Feature } from '@/lib/feature-votes/types'
+import { postMdk } from '@/lib/mdk-client'
 
 const SAT_PRESETS = [1000, 5000, 10000, 25000, 100000]
 
@@ -16,10 +18,11 @@ type CheckoutData = {
   expiresAt: string
 }
 
-type Feature = {
-  productId: string
-  name: string
-  description: string | null
+type FeatureVoteModalProps = {
+  open: boolean
+  onClose: () => void
+  feature: Pick<Feature, 'productId' | 'name' | 'description'> | null
+  onVoteRecorded: () => void
 }
 
 type Step = 'pick' | 'loading' | 'invoice' | 'paid' | 'expired'
@@ -28,44 +31,12 @@ function formatUsd(cents: number) {
   return `$${(cents / 100).toFixed(cents % 100 === 0 ? 0 : 2)}`
 }
 
-async function postMdk<T>(
-  handler: string,
-  payload: Record<string, unknown>,
-): Promise<T> {
-  let token = document.cookie
-    .split(';')
-    .find((c) => c.trim().startsWith('mdk_csrf='))
-    ?.split('=')[1]
-
-  if (!token) {
-    token = crypto.randomUUID()
-    document.cookie = `mdk_csrf=${token}; path=/; SameSite=Lax`
-  }
-
-  const res = await fetch('/api/mdk', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-moneydevkit-csrf-token': token,
-    },
-    body: JSON.stringify({ handler, ...payload }),
-  })
-
-  if (!res.ok) throw new Error(`MDK request failed: ${res.status}`)
-  return (await res.json()) as T
-}
-
 export function FeatureVoteModal({
   open,
   onClose,
   feature,
   onVoteRecorded,
-}: {
-  open: boolean
-  onClose: () => void
-  feature: Feature | null
-  onVoteRecorded: () => void
-}) {
+}: FeatureVoteModalProps) {
   const [step, setStep] = useState<Step>('pick')
   const [selectedAmount, setSelectedAmount] = useState(SAT_PRESETS[0])
   const [customAmount, setCustomAmount] = useState('')

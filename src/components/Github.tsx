@@ -1,4 +1,4 @@
-import { Button } from './Button'
+import { Button } from '@/components/Button'
 
 export function GitHubButton({ href }: { href: string }) {
   return (
@@ -9,7 +9,7 @@ export function GitHubButton({ href }: { href: string }) {
       target="_blank"
       rel="noopener noreferrer"
     >
-      <div className="py inline-flex items-center">
+      <div className="inline-flex items-center">
         <GitHubIcon className="mr-2 h-4 w-4" />
         View on GitHub
       </div>
@@ -17,7 +17,6 @@ export function GitHubButton({ href }: { href: string }) {
   )
 }
 
-// Separate icon component for reusability
 function GitHubIcon({ className }: { className?: string }) {
   return (
     <svg
