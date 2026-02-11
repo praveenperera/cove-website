@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useSyncExternalStore } from 'react'
 
 import { postMdk } from '@/lib/mdk-client'
 
@@ -16,6 +16,19 @@ type UseCheckoutPollingOptions = {
   onExpired: () => void
 }
 
+function subscribeToVisibility(callback: () => void) {
+  document.addEventListener('visibilitychange', callback)
+  return () => document.removeEventListener('visibilitychange', callback)
+}
+
+function getVisibility() {
+  return document.visibilityState === 'visible'
+}
+
+function getServerVisibility() {
+  return true
+}
+
 export function useCheckoutPolling({
   checkoutId,
   active,
@@ -25,11 +38,23 @@ export function useCheckoutPolling({
   const onPaidRef = useRef(onPaid)
   const onExpiredRef = useRef(onExpired)
 
-  useEffect(() => { onPaidRef.current = onPaid }, [onPaid])
-  useEffect(() => { onExpiredRef.current = onExpired }, [onExpired])
+  useEffect(() => {
+    onPaidRef.current = onPaid
+  }, [onPaid])
+  useEffect(() => {
+    onExpiredRef.current = onExpired
+  }, [onExpired])
+
+  const visible = useSyncExternalStore(
+    subscribeToVisibility,
+    getVisibility,
+    getServerVisibility,
+  )
+
+  const enabled = active && visible && !!checkoutId
 
   useEffect(() => {
-    if (!active || !checkoutId) return
+    if (!enabled || !checkoutId) return
 
     let cancelled = false
 
@@ -39,6 +64,8 @@ export function useCheckoutPolling({
         const { data } = await postMdk<MdkCheckoutStatus>('get_checkout', {
           checkoutId,
         })
+
+        if (cancelled) return
 
         if (data.status === 'EXPIRED') {
           onExpiredRef.current()
@@ -55,7 +82,7 @@ export function useCheckoutPolling({
             await onPaidRef.current()
           } catch {
             // onPaid failed (e.g. confirm endpoint), retry on next poll
-            if (!cancelled) setTimeout(poll, 750)
+            if (!cancelled) setTimeout(poll, 500)
           }
           return
         }
@@ -63,11 +90,13 @@ export function useCheckoutPolling({
         // ignore polling errors
       }
 
-      if (!cancelled) setTimeout(poll, 750)
+      if (!cancelled) setTimeout(poll, 500)
     }
 
     poll()
 
-    return () => { cancelled = true }
-  }, [active, checkoutId])
+    return () => {
+      cancelled = true
+    }
+  }, [enabled, checkoutId])
 }
