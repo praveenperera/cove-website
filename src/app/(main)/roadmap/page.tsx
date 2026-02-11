@@ -6,14 +6,7 @@ import { motion } from 'framer-motion'
 import { Container } from '@/components/Container'
 import { FeatureVoteModal } from '@/components/FeatureVoteModal'
 import { displayName, formatSats } from '@/lib/feature-votes/format'
-import type { Feature } from '@/lib/feature-votes/types'
-
-type FeatureCardProps = {
-  feature: Feature
-  rank: number
-  index: number
-  onVote: () => void
-}
+import type { Feature, FeatureCardProps } from '@/lib/feature-votes/types'
 
 type RankRowProps = FeatureCardProps & { maxSats: number }
 

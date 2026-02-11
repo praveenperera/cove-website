@@ -2,7 +2,7 @@
 
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import { QRCodeSVG } from 'qrcode.react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { postMdk } from '@/lib/mdk-client'
 
@@ -72,12 +72,12 @@ export function DonateModal({ open, onClose }: DonateModalProps) {
 
   const presets = currency === 'USD' ? USD_PRESETS : SAT_PRESETS
 
-  const amount = (() => {
+  const amount = useMemo(() => {
     if (!useCustom) return selectedAmount
     const parsed = parseFloat(customAmount) || 0
     if (currency === 'USD') return Math.round(parsed * 100)
     return Math.round(parsed)
-  })()
+  }, [useCustom, selectedAmount, customAmount, currency])
 
   const minAmount = currency === 'USD' ? 100 : 1
 
