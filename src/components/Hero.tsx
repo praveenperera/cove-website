@@ -5,11 +5,11 @@ import { Container } from '@/components/Container'
 import { PhoneFrame } from '@/components/PhoneFrame'
 import Image from 'next/image'
 
+import { Button } from '@/components/Button'
 import mainScreen from '@/images/main_screen.jpeg'
-import { Button } from './Button'
 
 function BackgroundIllustration(props: React.ComponentPropsWithoutRef<'div'>) {
-  let id = useId()
+  const id = useId()
 
   return (
     <div {...props}>

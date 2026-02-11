@@ -4,12 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 
-import { Container } from '@/components/Container'
-import { NavLinks } from '@/components/NavLinks'
-import { DonateModal } from '@/components/DonateModal'
-import qrCode from '@/images/qr-code.svg'
-import logo from '@/images/cove_logo.jpg'
 import { Button } from '@/components/Button'
+import { Container } from '@/components/Container'
+import { DonateModal } from '@/components/DonateModal'
+import { NavLinks } from '@/components/NavLinks'
+import logo from '@/images/cove_logo.jpg'
+import qrCode from '@/images/qr-code.svg'
 
 function QrCodeBorder(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (

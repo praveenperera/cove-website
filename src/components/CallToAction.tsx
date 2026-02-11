@@ -1,7 +1,7 @@
+import { AppStoreLink } from '@/components/AppStoreLink'
 import { CircleBackground } from '@/components/CircleBackground'
 import { Container } from '@/components/Container'
-import { AppStoreLink } from './AppStoreLink'
-import { GooglePlayLink } from './GooglePlayLink'
+import { GooglePlayLink } from '@/components/GooglePlayLink'
 
 export function CallToAction() {
   return (
