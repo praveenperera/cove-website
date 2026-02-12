@@ -1,13 +1,6 @@
 import { createClient } from '@libsql/client'
-import { POST as mdkPost } from '@moneydevkit/nextjs/server/route'
-
-type MdkInvoice = {
-  invoice: string
-  expiresAt: string
-  amountSats: number | null
-  amountSatsReceived: number | null
-  fiatAmount: number | null
-}
+import { createORPCClient } from '@orpc/client'
+import { RPCLink } from '@orpc/client/fetch'
 
 type MdkCheckout = {
   id: string
@@ -16,7 +9,13 @@ type MdkCheckout = {
   product?: { id: string } | null
   products?: Array<{ id: string }> | null
   userMetadata?: Record<string, unknown> | null
-  invoice?: MdkInvoice | null
+  invoice?: {
+    invoice: string
+    expiresAt: string
+    amountSats: number | null
+    amountSatsReceived: number | null
+    fiatAmount: number | null
+  } | null
   invoiceAmountSats?: number | null
   providedAmount?: number | null
   totalAmount?: number | null
@@ -29,35 +28,16 @@ type MdkProduct = {
 
 const FEATURE_PRODUCT_PREFIX = 'Feature:'
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null
-}
-
-async function callMdk<T>(payload: Record<string, unknown>): Promise<T> {
+function createMdkRpcClient() {
   const accessToken = process.env.MDK_ACCESS_TOKEN
   if (!accessToken) throw new Error('MDK_ACCESS_TOKEN is not configured')
 
-  const request = new Request('https://internal.mdk/api', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'x-moneydevkit-webhook-secret': accessToken,
-    },
-    body: JSON.stringify(payload),
+  const link = new RPCLink({
+    url: 'https://moneydevkit.com/rpc',
+    headers: () => ({ 'x-api-key': accessToken }),
   })
 
-  const response = await mdkPost(request)
-  const json = await response.json().catch(() => null)
-
-  if (!response.ok) {
-    const error =
-      isRecord(json) && typeof json.error === 'string'
-        ? json.error
-        : `MDK request failed (${response.status})`
-    throw new Error(error)
-  }
-
-  return json as T
+  return createORPCClient(link)
 }
 
 function extractProductId(checkout: MdkCheckout): string | null {
@@ -107,13 +87,14 @@ async function main() {
   }
 
   const db = createClient({ url: dbUrl, authToken })
+  const client = createMdkRpcClient()
 
-  // get all feature products from MDK
-  const { data: productsData } = await callMdk<{
-    data?: { products?: MdkProduct[] }
-  }>({ handler: 'list_products' })
+  // get all feature products from MDK via oRPC
+  const { products: allProducts }: { products: MdkProduct[] } = await (
+    client as any
+  ).products.list({})
 
-  const featureProducts = (productsData?.products ?? []).filter((p) =>
+  const featureProducts = allProducts.filter((p) =>
     p.name.trim().startsWith(FEATURE_PRODUCT_PREFIX),
   )
 
@@ -128,13 +109,36 @@ async function main() {
     featureProducts.map((p) => `${p.name} (${p.id})`),
   )
 
-  // get all checkouts from MDK
-  const { data: checkoutsData } = await callMdk<{
-    data?: { checkouts?: MdkCheckout[] }
-  }>({ handler: 'list_checkouts' })
+  // checkout listing is not available on the SDK oRPC endpoint,
+  // so checkout IDs must be passed as CLI args (from MDK dashboard or MCP tool)
+  const checkoutIds = process.argv
+    .slice(2)
+    .flatMap((arg) => arg.split(','))
+    .map((id) => id.trim())
+    .filter(Boolean)
 
-  const allCheckouts = checkoutsData?.checkouts ?? []
-  console.log(`Found ${allCheckouts.length} total checkouts`)
+  if (checkoutIds.length === 0) {
+    console.error(
+      'Usage: npx tsx scripts/reconcile-votes.ts <checkout_id1,checkout_id2,...>',
+    )
+    process.exit(1)
+  }
+
+  console.log(`Fetching ${checkoutIds.length} checkouts from MDK...`)
+
+  // fetch each checkout via oRPC checkout.get
+  const allCheckouts: MdkCheckout[] = []
+  for (const checkoutId of checkoutIds) {
+    try {
+      const checkout: MdkCheckout = await (client as any).checkout.get({
+        id: checkoutId,
+      })
+      allCheckouts.push(checkout)
+    } catch (err) {
+      console.warn(`  Failed to fetch checkout ${checkoutId}: ${err}`)
+    }
+  }
+  console.log(`Fetched ${allCheckouts.length} checkouts from MDK`)
 
   // filter to paid checkouts for feature products
   const paidFeatureCheckouts = allCheckouts.filter((c) => {
@@ -158,9 +162,7 @@ async function main() {
   const existingIds = new Set(existing.rows.map((r) => r.checkout_id as string))
   const missing = paidFeatureCheckouts.filter((c) => !existingIds.has(c.id))
 
-  console.log(
-    `${existingIds.size} already recorded, ${missing.length} missing`,
-  )
+  console.log(`${existingIds.size} already recorded, ${missing.length} missing`)
 
   // insert missing votes
   let reconciled = 0
