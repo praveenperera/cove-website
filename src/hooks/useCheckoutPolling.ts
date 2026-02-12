@@ -78,7 +78,11 @@ export function useCheckoutPolling({
           (data.invoice?.amountSatsReceived ?? 0) > 0
 
         if (paid) {
-          onPaidRef.current()
+          try {
+            await onPaidRef.current()
+          } catch (error) {
+            console.error('Error in onPaid callback:', error)
+          }
           return
         }
       } catch {

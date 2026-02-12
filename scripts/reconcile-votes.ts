@@ -86,6 +86,11 @@ async function main() {
     process.exit(1)
   }
 
+  if (!authToken) {
+    console.error('TURSO_AUTH_TOKEN is not set')
+    process.exit(1)
+  }
+
   const db = createClient({ url: dbUrl, authToken })
   const client = createMdkRpcClient()
 
