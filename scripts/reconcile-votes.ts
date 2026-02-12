@@ -2,31 +2,18 @@ import { createClient } from '@libsql/client'
 import { createORPCClient } from '@orpc/client'
 import { RPCLink } from '@orpc/client/fetch'
 
-type MdkCheckout = {
-  id: string
-  status: string
-  productId?: string | null
-  product?: { id: string } | null
-  products?: Array<{ id: string }> | null
-  userMetadata?: Record<string, unknown> | null
-  invoice?: {
-    invoice: string
-    expiresAt: string
-    amountSats: number | null
-    amountSatsReceived: number | null
-    fiatAmount: number | null
-  } | null
-  invoiceAmountSats?: number | null
-  providedAmount?: number | null
-  totalAmount?: number | null
-}
+import {
+  FEATURE_PRODUCT_PREFIX,
+  extractCheckoutProductId,
+  extractSettledSats,
+  isPaidCheckout,
+  type MdkCheckout,
+} from '../src/lib/feature-votes/server'
 
 type MdkProduct = {
   id: string
   name: string
 }
-
-const FEATURE_PRODUCT_PREFIX = 'Feature:'
 
 function createMdkRpcClient() {
   const accessToken = process.env.MDK_ACCESS_TOKEN
@@ -38,43 +25,6 @@ function createMdkRpcClient() {
   })
 
   return createORPCClient(link)
-}
-
-function extractProductId(checkout: MdkCheckout): string | null {
-  if (checkout.productId) return checkout.productId
-  if (checkout.product?.id) return checkout.product.id
-  const first = checkout.products?.[0]
-  if (first?.id) return first.id
-  const meta = checkout.userMetadata?.featureProductId
-  if (typeof meta === 'string') return meta
-  return null
-}
-
-function extractSettledSats(checkout: MdkCheckout): number {
-  const candidates = [
-    checkout.invoice?.amountSats,
-    checkout.invoiceAmountSats,
-    checkout.invoice?.amountSatsReceived,
-    checkout.providedAmount,
-    checkout.totalAmount,
-  ]
-
-  for (const c of candidates) {
-    if (typeof c === 'number' && Number.isFinite(c)) {
-      const sats = Math.round(c)
-      if (sats > 0) return sats
-    }
-  }
-
-  return 0
-}
-
-function isPaid(checkout: MdkCheckout): boolean {
-  return (
-    checkout.status === 'PAYMENT_RECEIVED' ||
-    checkout.status === 'CONFIRMED' ||
-    (checkout.invoice?.amountSatsReceived ?? 0) > 0
-  )
 }
 
 async function main() {
@@ -147,8 +97,8 @@ async function main() {
 
   // filter to paid checkouts for feature products
   const paidFeatureCheckouts = allCheckouts.filter((c) => {
-    const productId = extractProductId(c)
-    return productId && featureProductIds.has(productId) && isPaid(c)
+    const productId = extractCheckoutProductId(c)
+    return productId && featureProductIds.has(productId) && isPaidCheckout(c)
   })
 
   console.log(
@@ -172,7 +122,7 @@ async function main() {
   // insert missing votes
   let reconciled = 0
   for (const checkout of missing) {
-    const productId = extractProductId(checkout)!
+    const productId = extractCheckoutProductId(checkout)!
     const settledSats = extractSettledSats(checkout)
 
     if (settledSats <= 0) {
