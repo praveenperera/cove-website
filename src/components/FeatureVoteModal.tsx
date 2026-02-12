@@ -2,11 +2,11 @@
 
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import { QRCodeSVG } from 'qrcode.react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
+import { useCheckoutPolling } from '@/hooks/useCheckoutPolling'
 import { formatSats } from '@/lib/feature-votes/format'
 import type { Feature } from '@/lib/feature-votes/types'
-import { postMdk } from '@/lib/mdk-client'
 
 const SAT_PRESETS = [1000, 5000, 10000, 25000, 100000]
 
@@ -46,8 +46,6 @@ export function FeatureVoteModal({
   const [copySuccess, setCopySuccess] = useState(false)
   const [error, setError] = useState('')
 
-  const confirmingRef = useRef(false)
-
   const amount = useMemo(() => {
     if (!useCustom) return selectedAmount
     const parsed = parseFloat(customAmount || '0')
@@ -63,63 +61,24 @@ export function FeatureVoteModal({
     setCheckout(null)
     setCopySuccess(false)
     setError('')
-    confirmingRef.current = false
   }, [open, feature?.productId])
 
-  useEffect(() => {
-    if (step !== 'invoice' || !checkout || !feature) return
-
-    const interval = setInterval(async () => {
-      try {
-        const { data } = await postMdk<{
-          data: {
-            status: string
-            invoice?: {
-              amountSatsReceived?: number | null
-            } | null
-          }
-        }>('get_checkout', {
-          checkoutId: checkout.id,
-        })
-
-        if (data.status === 'EXPIRED') {
-          setStep('expired')
-          return
-        }
-
-        const paymentReceived =
-          data.status === 'PAYMENT_RECEIVED' ||
-          data.status === 'CONFIRMED' ||
-          (data.invoice?.amountSatsReceived ?? 0) > 0
-
-        if (!paymentReceived || confirmingRef.current) return
-
-        confirmingRef.current = true
-
-        const confirmRes = await fetch('/api/feature-votes/confirm', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ checkoutId: checkout.id }),
-        })
-
-        const confirmJson = (await confirmRes.json().catch(() => ({}))) as {
-          error?: string
-        }
-
-        if (!confirmRes.ok) {
-          throw new Error(confirmJson?.error || 'Failed to record vote')
-        }
-
-        setStep('paid')
-        onVoteRecorded()
-      } catch (pollError) {
-        console.error('feature vote polling error:', pollError)
-        confirmingRef.current = false
-      }
-    }, 2000)
-
-    return () => clearInterval(interval)
-  }, [checkout, feature, onVoteRecorded, step])
+  useCheckoutPolling({
+    checkoutId: checkout?.id ?? null,
+    active: step === 'invoice' && !!feature,
+    onPaid: async () => {
+      const res = await fetch('/api/feature-votes/confirm', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ checkoutId: checkout!.id }),
+      })
+      const json = (await res.json().catch(() => ({}))) as { error?: string }
+      if (!res.ok) throw new Error(json?.error || 'Failed to record vote')
+      setStep('paid')
+      onVoteRecorded()
+    },
+    onExpired: () => setStep('expired'),
+  })
 
   useEffect(() => {
     if (step !== 'invoice' || !checkout) return
@@ -220,7 +179,6 @@ export function FeatureVoteModal({
       setError('')
       setCustomAmount('')
       setUseCustom(false)
-      confirmingRef.current = false
     }, 200)
   }
 

@@ -4,6 +4,7 @@ import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
 import { QRCodeSVG } from 'qrcode.react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
+import { useCheckoutPolling } from '@/hooks/useCheckoutPolling'
 import { postMdk } from '@/lib/mdk-client'
 
 const USD_PRESETS = [100, 500, 1000, 2500, 5000]
@@ -34,11 +35,6 @@ type CheckoutData = {
 }
 
 type MdkResponse<T> = { data: T }
-
-type MdkCheckoutStatus = {
-  status: string
-  invoice?: { amountSatsReceived?: number | null } | null
-}
 
 type MdkCreatedCheckout = {
   id: string
@@ -81,32 +77,12 @@ export function DonateModal({ open, onClose }: DonateModalProps) {
 
   const minAmount = currency === 'USD' ? 100 : 1
 
-  // poll for payment
-  useEffect(() => {
-    if (step !== 'invoice' || !checkout) return
-
-    const interval = setInterval(async () => {
-      try {
-        const { data } = await postMdk<MdkResponse<MdkCheckoutStatus>>(
-          'get_checkout',
-          { checkoutId: checkout.id },
-        )
-
-        if (
-          data.status === 'PAYMENT_RECEIVED' ||
-          (data.invoice?.amountSatsReceived ?? 0) > 0
-        ) {
-          setStep('paid')
-        } else if (data.status === 'EXPIRED') {
-          setStep('expired')
-        }
-      } catch {
-        // ignore polling errors
-      }
-    }, 2000)
-
-    return () => clearInterval(interval)
-  }, [step, checkout])
+  useCheckoutPolling({
+    checkoutId: checkout?.id ?? null,
+    active: step === 'invoice',
+    onPaid: () => setStep('paid'),
+    onExpired: () => setStep('expired'),
+  })
 
   // countdown timer
   useEffect(() => {
