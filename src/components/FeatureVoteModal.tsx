@@ -72,8 +72,13 @@ export function FeatureVoteModal({
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ checkoutId: checkout!.id }),
       })
-      const json = (await res.json().catch(() => ({}))) as { error?: string }
-      if (!res.ok) throw new Error(json?.error || 'Failed to record vote')
+      const json = (await res.json().catch(() => ({}))) as {
+        accepted?: boolean
+        error?: string
+      }
+      if (!res.ok || !json.accepted) {
+        throw new Error(json?.error || 'Vote not yet confirmed')
+      }
       setStep('paid')
       onVoteRecorded()
     },
