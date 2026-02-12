@@ -80,9 +80,8 @@ export function useCheckoutPolling({
         if (paid) {
           try {
             await onPaidRef.current()
-          } catch {
-            // onPaid failed (e.g. confirm endpoint), retry on next poll
-            if (!cancelled) setTimeout(poll, 500)
+          } catch (error) {
+            console.error('Error in onPaid callback:', error)
           }
           return
         }

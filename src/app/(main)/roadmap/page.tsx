@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 
 import { Container } from '@/components/Container'
 import { FeatureVoteModal } from '@/components/FeatureVoteModal'
+import { usePendingCheckoutRecovery } from '@/hooks/usePendingCheckoutRecovery'
 import { displayName, formatSats } from '@/lib/feature-votes/format'
 import type { Feature, FeatureCardProps } from '@/lib/feature-votes/types'
 
@@ -270,6 +271,8 @@ export default function NextFeaturesPage() {
       setLoading(false)
     }
   }, [])
+
+  usePendingCheckoutRecovery(fetchLeaderboard)
 
   useEffect(() => {
     fetchLeaderboard()

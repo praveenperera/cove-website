@@ -45,7 +45,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Checkout not found' }, { status: 404 })
     }
 
-    if (!isPaidCheckout(checkout)) {
+    const paid =
+      isPaidCheckout(checkout) ||
+      (checkout.invoice?.amountSatsReceived ?? 0) > 0
+
+    if (!paid) {
       return NextResponse.json({
         accepted: false,
         status: checkout.status,
