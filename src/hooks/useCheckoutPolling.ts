@@ -78,12 +78,7 @@ export function useCheckoutPolling({
           (data.invoice?.amountSatsReceived ?? 0) > 0
 
         if (paid) {
-          try {
-            await onPaidRef.current()
-          } catch {
-            // onPaid failed (e.g. confirm endpoint), retry on next poll
-            if (!cancelled) setTimeout(poll, 500)
-          }
+          onPaidRef.current()
           return
         }
       } catch {

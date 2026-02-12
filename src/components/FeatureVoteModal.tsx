@@ -5,7 +5,12 @@ import { QRCodeSVG } from 'qrcode.react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useCheckoutPolling } from '@/hooks/useCheckoutPolling'
+import { confirmCheckout } from '@/lib/feature-votes/confirm-checkout'
 import { formatSats } from '@/lib/feature-votes/format'
+import {
+  addPendingCheckout,
+  removePendingCheckout,
+} from '@/lib/feature-votes/pending-checkouts'
 import type { Feature } from '@/lib/feature-votes/types'
 
 const SAT_PRESETS = [1000, 5000, 10000, 25000, 100000]
@@ -67,22 +72,14 @@ export function FeatureVoteModal({
     checkoutId: checkout?.id ?? null,
     active: step === 'invoice' && !!feature,
     onPaid: async () => {
-      const res = await fetch('/api/feature-votes/confirm', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ checkoutId: checkout!.id }),
-      })
-      const json = (await res.json().catch(() => ({}))) as {
-        accepted?: boolean
-        error?: string
-      }
-      if (!res.ok || !json.accepted) {
-        throw new Error(json?.error || 'Vote not yet confirmed')
-      }
+      const confirmed = await confirmCheckout(checkout!.id)
       setStep('paid')
-      onVoteRecorded()
+      if (confirmed) onVoteRecorded()
     },
-    onExpired: () => setStep('expired'),
+    onExpired: () => {
+      if (checkout) removePendingCheckout(checkout.id)
+      setStep('expired')
+    },
   })
 
   useEffect(() => {
@@ -93,6 +90,7 @@ export function FeatureVoteModal({
 
       if (diff <= 0) {
         setTimeRemaining('Expired')
+        removePendingCheckout(checkout.id)
         setStep('expired')
         return
       }
@@ -155,6 +153,11 @@ export function FeatureVoteModal({
       if (!json.data) {
         throw new Error('Missing checkout data in API response')
       }
+
+      addPendingCheckout({
+        checkoutId: json.data.checkoutId,
+        productId: feature.productId,
+      })
 
       setCheckout({
         id: json.data.checkoutId,
