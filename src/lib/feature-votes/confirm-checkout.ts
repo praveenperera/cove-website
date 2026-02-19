@@ -2,6 +2,8 @@ import { removePendingCheckout } from './pending-checkouts'
 
 const inflight = new Map<string, Promise<boolean>>()
 
+const TERMINAL_STATUSES = new Set(['EXPIRED', 'CANCELLED'])
+
 const MAX_ATTEMPTS = 10
 const INITIAL_DELAY_MS = 500
 const MAX_DELAY_MS = 10_000
@@ -26,11 +28,18 @@ async function attemptConfirm(checkoutId: string): Promise<boolean> {
       if (res.ok) {
         const json = (await res.json().catch(() => ({}))) as {
           accepted?: boolean
+          status?: string
         }
 
         if (json.accepted) {
           removePendingCheckout(checkoutId)
           return true
+        }
+
+        // checkout is in a terminal state, stop retrying
+        if (json.status && TERMINAL_STATUSES.has(json.status)) {
+          removePendingCheckout(checkoutId)
+          return false
         }
       }
     } catch {
@@ -43,6 +52,8 @@ async function attemptConfirm(checkoutId: string): Promise<boolean> {
     }
   }
 
+  // exhausted all retries, clean up so we don't retry on every page load
+  removePendingCheckout(checkoutId)
   return false
 }
 
