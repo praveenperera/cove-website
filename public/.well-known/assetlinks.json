@@ -8,5 +8,15 @@
         "04:F4:A0:85:5A:CE:CB:8D:74:E8:43:F0:3F:EC:EE:5C:65:2C:FD:65:41:51:B8:9D:C4:3F:77:4C:83:74:AA:E9"
       ]
     }
+  },
+  {
+    "relation": ["delegate_permission/common.get_login_creds"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "org.bitcoinppl.cove.dev",
+      "sha256_cert_fingerprints": [
+        "87:9F:54:C1:93:63:CA:22:FB:91:22:9D:6F:C3:91:35:88:8B:A8:BE:62:05:2D:E9:4B:64:A7:17:CC:68:14:FE"
+      ]
+    }
   }
 ]
