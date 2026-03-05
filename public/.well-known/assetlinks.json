@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.get_login_creds"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "org.bitcoinppl.cove",
+      "sha256_cert_fingerprints": [
+        "FC:DC:6D:35:10:CA:D5:AD:E1:FC:AC:D7:63:59:14:83:AB:0B:E7:33:A7:C1:D5:9F:2D:5A:B7:4E:3C:3D:8F:4B"
+      ]
+    }
+  }
+]
