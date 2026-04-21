@@ -87,34 +87,53 @@ export function RoadmapVotes() {
   const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
 
+  const loadLeaderboard = useCallback(async () => {
+    const res = await fetch('/api/feature-votes/leaderboard', {
+      cache: 'no-store',
+    })
+
+    if (!res.ok) throw new Error()
+
+    const json = (await res.json().catch(() => ({}))) as {
+      features?: Feature[]
+    }
+
+    return json.features ?? []
+  }, [])
+
   const fetchLeaderboard = useCallback(async () => {
+    setLoading(true)
     setError(false)
 
     try {
-      const res = await fetch('/api/feature-votes/leaderboard', {
-        cache: 'no-store',
-      })
-
-      if (!res.ok) throw new Error()
-
-      const json = (await res.json().catch(() => ({}))) as {
-        features?: Feature[]
-      }
-
-      setFeatures(json.features ?? [])
+      setFeatures(await loadLeaderboard())
     } catch {
-      setFeatures((prev) => {
-        if (prev.length === 0) setError(true)
-        return prev
-      })
+      if (features.length === 0) setError(true)
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [features.length, loadLeaderboard])
 
   useEffect(() => {
-    fetchLeaderboard()
-  }, [fetchLeaderboard])
+    let cancelled = false
+
+    void (async () => {
+      try {
+        const nextFeatures = await loadLeaderboard()
+        if (cancelled) return
+        setFeatures(nextFeatures)
+      } catch {
+        if (cancelled) return
+        setError(true)
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [loadLeaderboard])
 
   const totalSats = useMemo(
     () => features.reduce((sum, f) => sum + f.totalSats, 0),
@@ -218,20 +237,22 @@ export function RoadmapVotes() {
         </div>
       </Container>
 
-      <FeatureVoteModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        feature={
-          selectedFeature
-            ? {
-                productId: selectedFeature.productId,
-                name: selectedFeature.name,
-                description: selectedFeature.description,
-              }
-            : null
-        }
-        onVoteRecorded={fetchLeaderboard}
-      />
+      {modalOpen && selectedFeature && (
+        <FeatureVoteModal
+          key={selectedFeature.productId}
+          open={modalOpen}
+          onClose={() => {
+            setModalOpen(false)
+            setSelectedFeature(null)
+          }}
+          feature={{
+            productId: selectedFeature.productId,
+            name: selectedFeature.name,
+            description: selectedFeature.description,
+          }}
+          onVoteRecorded={fetchLeaderboard}
+        />
+      )}
     </section>
   )
 }

@@ -243,24 +243,28 @@ export default function NextFeaturesPage() {
   const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
 
+  const loadLeaderboard = useCallback(async () => {
+    const response = await fetch('/api/feature-votes/leaderboard', {
+      cache: 'no-store',
+    })
+    const json = (await response.json().catch(() => ({}))) as {
+      error?: string
+      features?: Feature[]
+    }
+
+    if (!response.ok) {
+      throw new Error(json?.error || 'Failed to load leaderboard')
+    }
+
+    return json.features ?? []
+  }, [])
+
   const fetchLeaderboard = useCallback(async () => {
     setLoading(true)
     setError('')
 
     try {
-      const response = await fetch('/api/feature-votes/leaderboard', {
-        cache: 'no-store',
-      })
-      const json = (await response.json().catch(() => ({}))) as {
-        error?: string
-        features?: Feature[]
-      }
-
-      if (!response.ok) {
-        throw new Error(json?.error || 'Failed to load leaderboard')
-      }
-
-      setFeatures(json.features ?? [])
+      setFeatures(await loadLeaderboard())
     } catch (fetchError) {
       setError(
         fetchError instanceof Error
@@ -270,13 +274,34 @@ export default function NextFeaturesPage() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [loadLeaderboard])
 
   usePendingCheckoutRecovery(fetchLeaderboard)
 
   useEffect(() => {
-    fetchLeaderboard()
-  }, [fetchLeaderboard])
+    let cancelled = false
+
+    void (async () => {
+      try {
+        const nextFeatures = await loadLeaderboard()
+        if (cancelled) return
+        setFeatures(nextFeatures)
+      } catch (fetchError) {
+        if (cancelled) return
+        setError(
+          fetchError instanceof Error
+            ? fetchError.message
+            : 'Failed to load leaderboard',
+        )
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [loadLeaderboard])
 
   const totalSats = useMemo(
     () => features.reduce((sum, f) => sum + f.totalSats, 0),
@@ -419,20 +444,22 @@ export default function NextFeaturesPage() {
         )}
       </div>
 
-      <FeatureVoteModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        feature={
-          selectedFeature
-            ? {
-                productId: selectedFeature.productId,
-                name: selectedFeature.name,
-                description: selectedFeature.description,
-              }
-            : null
-        }
-        onVoteRecorded={fetchLeaderboard}
-      />
+      {modalOpen && selectedFeature && (
+        <FeatureVoteModal
+          key={selectedFeature.productId}
+          open={modalOpen}
+          onClose={() => {
+            setModalOpen(false)
+            setSelectedFeature(null)
+          }}
+          feature={{
+            productId: selectedFeature.productId,
+            name: selectedFeature.name,
+            description: selectedFeature.description,
+          }}
+          onVoteRecorded={fetchLeaderboard}
+        />
+      )}
     </Container>
   )
 }

@@ -57,17 +57,6 @@ export function FeatureVoteModal({
     return Number.isFinite(parsed) ? Math.round(parsed) : 0
   }, [customAmount, selectedAmount, useCustom])
 
-  useEffect(() => {
-    if (!open) return
-    setStep('pick')
-    setSelectedAmount(SAT_PRESETS[0])
-    setCustomAmount('')
-    setUseCustom(false)
-    setCheckout(null)
-    setCopySuccess(false)
-    setError('')
-  }, [open, feature?.productId])
-
   useCheckoutPolling({
     checkoutId: checkout?.id ?? null,
     active: step === 'invoice' && !!feature,
@@ -180,14 +169,6 @@ export function FeatureVoteModal({
 
   const handleClose = () => {
     onClose()
-    setTimeout(() => {
-      setStep('pick')
-      setCheckout(null)
-      setCopySuccess(false)
-      setError('')
-      setCustomAmount('')
-      setUseCustom(false)
-    }, 200)
   }
 
   return (
