@@ -12,10 +12,10 @@
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
     "@headlessui/react": "^2.2.10",
-    "@libsql/client": "^0.17.2",
+    "@libsql/client": "^0.17.3",
     "@moneydevkit/nextjs": "^0.16.0",
     "@tailwindcss/forms": "^0.5.11",
-    "@tailwindcss/postcss": "^4.2.2",
+    "@tailwindcss/postcss": "^4.2.4",
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -25,7 +25,7 @@
     "next": "^16.2.4",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^4.2.4",
     "typescript": "^6.0.3",
     "use-debounce": "^10.1.1"
   },
@@ -33,7 +33,7 @@
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.4",
     "prettier": "^3.8.3",
-    "prettier-plugin-tailwindcss": "^0.7.2",
+    "prettier-plugin-tailwindcss": "^0.8.0",
     "sharp": "^0.34.5"
   }
 }
