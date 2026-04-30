@@ -1,4 +1,8 @@
 import { createClient, type Client } from '@libsql/client'
+import {
+  createMoneyDevKitClient,
+  createMoneyDevKitNode,
+} from '@moneydevkit/core'
 import { POST as mdkPost } from '@moneydevkit/nextjs/server/route'
 
 export const FEATURE_PRODUCT_PREFIX = 'Feature:'
@@ -18,14 +22,17 @@ export type FeatureProduct = {
 type MdkInvoice = {
   invoice: string
   expiresAt: string
+  btcPrice?: number | null
   amountSats: number | null
   amountSatsReceived: number | null
   fiatAmount: number | null
+  paymentHash?: string | null
 }
 
 export type MdkCheckout = {
   id: string
   status: string
+  invoiceScid?: string | null
   productId?: string | null
   product?: { id: string } | null
   products?: Array<{ id: string }> | null
@@ -34,6 +41,14 @@ export type MdkCheckout = {
   invoiceAmountSats?: number | null
   providedAmount?: number | null
   totalAmount?: number | null
+}
+
+type ConfirmCheckoutParams = {
+  checkoutId: string
+  products?: Array<{
+    productId: string
+    priceAmount?: number
+  }>
 }
 
 let _db: Client | null = null
@@ -103,6 +118,34 @@ export async function getFeatureProductById(
 ): Promise<FeatureProduct | null> {
   const products = await listFeatureProducts()
   return products.find((product) => product.id === productId) ?? null
+}
+
+export async function confirmCheckoutWithLocalInvoice(
+  confirm: ConfirmCheckoutParams,
+): Promise<MdkCheckout> {
+  const client = createMoneyDevKitClient()
+  const node = createMoneyDevKitNode()
+
+  try {
+    const confirmedCheckout = await client.checkouts.confirm(confirm)
+    const invoice = confirmedCheckout.invoiceScid
+      ? node.invoices.createWithScid(
+          confirmedCheckout.invoiceScid,
+          confirmedCheckout.invoiceAmountSats,
+        )
+      : node.invoices.create(confirmedCheckout.invoiceAmountSats)
+
+    return (await client.checkouts.registerInvoice({
+      paymentHash: invoice.paymentHash,
+      invoice: invoice.invoice,
+      invoiceExpiresAt: invoice.expiresAt,
+      checkoutId: confirmedCheckout.id,
+      nodeId: node.id,
+      scid: invoice.scid,
+    })) as MdkCheckout
+  } finally {
+    node.destroy()
+  }
 }
 
 export function extractCheckoutProductId(checkout: MdkCheckout): string | null {

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 
 import {
   callMdk,
+  confirmCheckoutWithLocalInvoice,
   getFeatureProductById,
   type MdkCheckout,
 } from '@/lib/feature-votes/server'
@@ -85,20 +86,15 @@ export async function POST(request: Request) {
       )
     }
 
-    const confirmResponse = await callMdk<{ data?: MdkCheckout }>({
-      handler: 'confirm_checkout',
-      confirm: {
-        checkoutId,
-        products: [
-          {
-            productId: product.id,
-            priceAmount: amountSats,
-          },
-        ],
-      },
+    const checkout = await confirmCheckoutWithLocalInvoice({
+      checkoutId,
+      products: [
+        {
+          productId: product.id,
+          priceAmount: amountSats,
+        },
+      ],
     })
-
-    const checkout = confirmResponse.data
 
     if (!checkout?.invoice?.invoice || !checkout.invoice.expiresAt) {
       return NextResponse.json(
