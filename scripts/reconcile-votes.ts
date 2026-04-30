@@ -15,7 +15,16 @@ type MdkProduct = {
   name: string
 }
 
-function createMdkRpcClient() {
+type MdkRpcClient = {
+  products: {
+    list: (params: Record<string, never>) => Promise<{ products: MdkProduct[] }>
+  }
+  checkout: {
+    get: (params: { id: string }) => Promise<MdkCheckout>
+  }
+}
+
+function createMdkRpcClient(): MdkRpcClient {
   const accessToken = process.env.MDK_ACCESS_TOKEN
   if (!accessToken) throw new Error('MDK_ACCESS_TOKEN is not configured')
 
@@ -24,7 +33,7 @@ function createMdkRpcClient() {
     headers: () => ({ 'x-api-key': accessToken }),
   })
 
-  return createORPCClient(link)
+  return createORPCClient<MdkRpcClient>(link)
 }
 
 async function main() {
@@ -44,10 +53,7 @@ async function main() {
   const db = createClient({ url: dbUrl, authToken })
   const client = createMdkRpcClient()
 
-  // get all feature products from MDK via oRPC
-  const { products: allProducts }: { products: MdkProduct[] } = await (
-    client as any
-  ).products.list({})
+  const { products: allProducts } = await client.products.list({})
 
   const featureProducts = allProducts.filter((p) =>
     p.name.trim().startsWith(FEATURE_PRODUCT_PREFIX),
@@ -64,8 +70,6 @@ async function main() {
     featureProducts.map((p) => `${p.name} (${p.id})`),
   )
 
-  // checkout listing is not available on the SDK oRPC endpoint,
-  // so checkout IDs must be passed as CLI args (from MDK dashboard or MCP tool)
   const checkoutIds = process.argv
     .slice(2)
     .flatMap((arg) => arg.split(','))
@@ -81,11 +85,10 @@ async function main() {
 
   console.log(`Fetching ${checkoutIds.length} checkouts from MDK...`)
 
-  // fetch each checkout via oRPC checkout.get
   const allCheckouts: MdkCheckout[] = []
   for (const checkoutId of checkoutIds) {
     try {
-      const checkout: MdkCheckout = await (client as any).checkout.get({
+      const checkout = await client.checkout.get({
         id: checkoutId,
       })
       allCheckouts.push(checkout)
@@ -95,7 +98,6 @@ async function main() {
   }
   console.log(`Fetched ${allCheckouts.length} checkouts from MDK`)
 
-  // filter to paid checkouts for feature products
   const paidFeatureCheckouts = allCheckouts.filter((c) => {
     const productId = extractCheckoutProductId(c)
     return productId && featureProductIds.has(productId) && isPaidCheckout(c)
@@ -107,7 +109,6 @@ async function main() {
 
   if (paidFeatureCheckouts.length === 0) return
 
-  // check which are already in the DB
   const placeholders = paidFeatureCheckouts.map(() => '?').join(', ')
   const existing = await db.execute({
     sql: `SELECT checkout_id FROM feature_vote_events WHERE checkout_id IN (${placeholders})`,
@@ -119,7 +120,6 @@ async function main() {
 
   console.log(`${existingIds.size} already recorded, ${missing.length} missing`)
 
-  // insert missing votes
   let reconciled = 0
   for (const checkout of missing) {
     const productId = extractCheckoutProductId(checkout)!
