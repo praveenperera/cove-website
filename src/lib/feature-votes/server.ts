@@ -152,6 +152,29 @@ export function isPaidCheckout(checkout: MdkCheckout): boolean {
   )
 }
 
+export type FeatureVoteRecordResult = {
+  inserted: boolean
+  checkoutId: string
+  featureProductId: string
+  settledSats: number
+  status: string
+}
+
+export class FeatureVoteRecordError extends Error {
+  constructor(
+    message: string,
+    public readonly code:
+      | 'unpaid'
+      | 'missing_product'
+      | 'non_feature_product'
+      | 'missing_settled_sats',
+    public readonly status?: string,
+  ) {
+    super(message)
+    this.name = 'FeatureVoteRecordError'
+  }
+}
+
 type FeatureVoteEventParams = {
   checkoutId: string
   productId: string
@@ -189,6 +212,67 @@ export async function insertFeatureVoteEvent(
   })
 
   return (result.rowsAffected ?? 0) > 0
+}
+
+export async function recordPaidFeatureVoteCheckout(
+  checkout: MdkCheckout,
+): Promise<FeatureVoteRecordResult> {
+  const paid =
+    isPaidCheckout(checkout) || (checkout.invoice?.amountSatsReceived ?? 0) > 0
+
+  if (!paid) {
+    throw new FeatureVoteRecordError(
+      'Checkout is not paid',
+      'unpaid',
+      checkout.status,
+    )
+  }
+
+  const productId = extractCheckoutProductId(checkout)
+
+  if (!productId) {
+    throw new FeatureVoteRecordError(
+      'Unable to resolve productId from checkout',
+      'missing_product',
+      checkout.status,
+    )
+  }
+
+  const featureProduct = await getFeatureProductById(productId)
+
+  if (!featureProduct) {
+    throw new FeatureVoteRecordError(
+      'Checkout product is not a feature vote product',
+      'non_feature_product',
+      checkout.status,
+    )
+  }
+
+  const settledSats = extractSettledSats(checkout)
+
+  if (settledSats <= 0) {
+    throw new FeatureVoteRecordError(
+      'Unable to determine settled sats for checkout',
+      'missing_settled_sats',
+      checkout.status,
+    )
+  }
+
+  const inserted = await insertFeatureVoteEvent({
+    checkoutId: checkout.id,
+    productId,
+    settledSats,
+    checkoutStatus: checkout.status,
+    rawCheckout: checkout,
+  })
+
+  return {
+    inserted,
+    checkoutId: checkout.id,
+    featureProductId: productId,
+    settledSats,
+    status: checkout.status,
+  }
 }
 
 export async function getVoteTotalsByProductId(

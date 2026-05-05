@@ -43,3 +43,15 @@ The page is available at `/roadmap`.
 - Products are loaded from MDK and filtered to names starting with `Feature:`.
 - Voting uses SAT custom amounts.
 - Confirmed votes are persisted in Turso and leaderboard rank is sorted by total sats.
+
+### MDK webhooks
+
+Configure an MDK dashboard webhook endpoint for:
+
+```text
+https://covebitcoinwallet.com/api/webhooks/mdk
+```
+
+Subscribe to `checkout.completed` and set `MDK_WEBHOOK_SECRET` to the endpoint
+signing secret. Webhooks record feature-vote payments server-side, while the
+existing browser polling and confirmation route remain the fallback path.

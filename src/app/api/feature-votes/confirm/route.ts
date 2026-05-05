@@ -2,11 +2,8 @@ import { NextResponse } from 'next/server'
 
 import {
   callMdk,
-  extractCheckoutProductId,
-  extractSettledSats,
-  getFeatureProductById,
-  insertFeatureVoteEvent,
-  isPaidCheckout,
+  FeatureVoteRecordError,
+  recordPaidFeatureVoteCheckout,
   type MdkCheckout,
 } from '@/lib/feature-votes/server'
 
@@ -45,60 +42,27 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Checkout not found' }, { status: 404 })
     }
 
-    const paid =
-      isPaidCheckout(checkout) ||
-      (checkout.invoice?.amountSatsReceived ?? 0) > 0
+    try {
+      const recorded = await recordPaidFeatureVoteCheckout(checkout)
 
-    if (!paid) {
       return NextResponse.json({
-        accepted: false,
-        status: checkout.status,
+        accepted: true,
+        ...recorded,
       })
+    } catch (error) {
+      if (error instanceof FeatureVoteRecordError && error.code === 'unpaid') {
+        return NextResponse.json({
+          accepted: false,
+          status: error.status,
+        })
+      }
+
+      if (error instanceof FeatureVoteRecordError) {
+        return NextResponse.json({ error: error.message }, { status: 400 })
+      }
+
+      throw error
     }
-
-    const productId = extractCheckoutProductId(checkout)
-
-    if (!productId) {
-      return NextResponse.json(
-        { error: 'Unable to resolve productId from checkout' },
-        { status: 400 },
-      )
-    }
-
-    const featureProduct = await getFeatureProductById(productId)
-
-    if (!featureProduct) {
-      return NextResponse.json(
-        { error: 'Checkout product is not a feature vote product' },
-        { status: 400 },
-      )
-    }
-
-    const settledSats = extractSettledSats(checkout)
-
-    if (settledSats <= 0) {
-      return NextResponse.json(
-        { error: 'Unable to determine settled sats for checkout' },
-        { status: 400 },
-      )
-    }
-
-    const inserted = await insertFeatureVoteEvent({
-      checkoutId: checkout.id,
-      productId,
-      settledSats,
-      checkoutStatus: checkout.status,
-      rawCheckout: checkout,
-    })
-
-    return NextResponse.json({
-      accepted: true,
-      inserted,
-      checkoutId: checkout.id,
-      featureProductId: productId,
-      settledSats,
-      status: checkout.status,
-    })
   } catch (error) {
     console.error('feature vote confirm failed:', error)
     return NextResponse.json(
