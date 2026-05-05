@@ -11,9 +11,10 @@ import {
 export const runtime = 'nodejs'
 
 type MdkWebhookPayload = {
-  type?: unknown
-  event?: unknown
-  data?: unknown
+  type: string
+  timestamp?: string
+  id?: string
+  data: Record<string, unknown>
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -22,6 +23,23 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function headerValue(request: Request, name: string): string {
   return request.headers.get(name) ?? ''
+}
+
+function parseWebhookPayload(value: unknown): MdkWebhookPayload {
+  if (!isRecord(value)) {
+    throw new Error('Invalid webhook payload')
+  }
+
+  if (typeof value.type !== 'string' || !isRecord(value.data)) {
+    throw new Error('Invalid webhook payload')
+  }
+
+  return {
+    type: value.type,
+    timestamp: typeof value.timestamp === 'string' ? value.timestamp : undefined,
+    id: typeof value.id === 'string' ? value.id : undefined,
+    data: value.data,
+  }
 }
 
 function verifyWebhookPayload(
@@ -41,22 +59,14 @@ function verifyWebhookPayload(
     'webhook-signature': headerValue(request, 'webhook-signature'),
   })
 
-  if (!isRecord(verified)) {
-    throw new Error('Invalid webhook payload')
-  }
-
-  return verified
+  return parseWebhookPayload(verified)
 }
 
 function getEventType(payload: MdkWebhookPayload): string {
-  if (typeof payload.type === 'string') return payload.type
-  if (typeof payload.event === 'string') return payload.event
-  return ''
+  return payload.type
 }
 
 function extractCheckoutId(payload: MdkWebhookPayload): string {
-  if (!isRecord(payload.data)) return ''
-
   const checkoutId = payload.data.checkoutId
   if (typeof checkoutId === 'string') return checkoutId.trim()
 
