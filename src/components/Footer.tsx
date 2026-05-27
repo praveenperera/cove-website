@@ -71,7 +71,14 @@ export function Footer() {
             &middot;{' '}
             <Link href="/privacy" className="underline hover:text-gray-700">
               Privacy
-            </Link>
+            </Link>{' '}
+            &middot;{' '}
+            <a
+              href="mailto:support@covebitcoinwallet.com"
+              className="underline hover:text-gray-700"
+            >
+              Support
+            </a>
           </p>
           <div className="flex gap-3">
             <Button
