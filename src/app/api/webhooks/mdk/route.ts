@@ -36,7 +36,8 @@ function parseWebhookPayload(value: unknown): MdkWebhookPayload {
 
   return {
     type: value.type,
-    timestamp: typeof value.timestamp === 'string' ? value.timestamp : undefined,
+    timestamp:
+      typeof value.timestamp === 'string' ? value.timestamp : undefined,
     id: typeof value.id === 'string' ? value.id : undefined,
     data: value.data,
   }
