@@ -6,7 +6,23 @@ import { fileURLToPath } from 'node:url'
 
 const configDir = path.dirname(fileURLToPath(import.meta.url))
 
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "connect-src 'self' https://*.vercel-insights.com https://vitals.vercel-insights.com",
+  "font-src 'self' https://fonts.gstatic.com",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
+  "img-src 'self' data: blob:",
+  "object-src 'none'",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.vercel-insights.com https://vitals.vercel-insights.com",
+  "style-src 'self' 'unsafe-inline'",
+  'upgrade-insecure-requests',
+].join('; ')
+
 const securityHeaders = [
+  { key: 'Content-Security-Policy', value: contentSecurityPolicy },
   {
     key: 'Strict-Transport-Security',
     value: 'max-age=63072000; includeSubDomains; preload',
@@ -14,6 +30,12 @@ const securityHeaders = [
   { key: 'X-Frame-Options', value: 'DENY' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  {
+    key: 'Permissions-Policy',
+    value:
+      'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()',
+  },
+  { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
 ]
 
 const nextConfig = {
