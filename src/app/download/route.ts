@@ -1,21 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-
-const APP_STORE_URL =
-  'https://apps.apple.com/app/cove-simple-bitcoin-wallet/id6642680364'
-const PLAY_STORE_URL =
-  'https://play.google.com/store/apps/details?id=org.bitcoinppl.cove'
+import { storeUrlForUserAgent } from '@/lib/store-redirect'
 
 export function GET(request: NextRequest) {
-  const ua = request.headers.get('user-agent')?.toLowerCase() ?? ''
+  const storeUrl = storeUrlForUserAgent(request.headers.get('user-agent'))
 
-  if (/android/.test(ua)) {
-    return NextResponse.redirect(PLAY_STORE_URL)
+  if (storeUrl) {
+    return NextResponse.redirect(storeUrl)
   }
 
-  if (/iphone|ipad|ipod|mac/.test(ua)) {
-    return NextResponse.redirect(APP_STORE_URL)
-  }
-
-  // fallback to homepage where both links are shown
   return NextResponse.redirect(new URL('/', request.url))
 }
