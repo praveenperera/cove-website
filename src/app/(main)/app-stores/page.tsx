@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function AppStoresPage() {
   return (
     <Container className="py-20 sm:py-28">
-      <div className="mx-auto flex max-w-md flex-col items-center text-center">
+      <div className="mx-auto flex max-w-lg flex-col items-center text-center">
         <Link href="/" aria-label="Cove home">
           <Logo />
         </Link>
@@ -26,9 +26,9 @@ export default function AppStoresPage() {
           Get the simple bitcoin-only wallet on your phone.
         </p>
 
-        <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row">
-          <AppStoreLink />
-          <GooglePlayLink />
+        <div className="mt-10 flex flex-col items-center gap-5 sm:flex-row sm:gap-6">
+          <AppStoreLink size="lg" />
+          <GooglePlayLink size="lg" />
         </div>
 
         <Link

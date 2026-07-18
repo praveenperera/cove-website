@@ -3,8 +3,10 @@ import clsx from 'clsx'
 
 export function GooglePlayLink({
   color = 'black',
+  size = 'md',
 }: {
   color?: 'black' | 'white'
+  size?: 'md' | 'lg'
 }) {
   const textFill = color === 'black' ? '#fff' : '#111827'
 
@@ -19,7 +21,12 @@ export function GooglePlayLink({
           : 'bg-white text-gray-900 hover:bg-gray-50',
       )}
     >
-      <svg viewBox="0 0 270 80" aria-hidden="true" className="h-10" fill="none">
+      <svg
+        viewBox="0 0 270 80"
+        aria-hidden="true"
+        className={clsx(size === 'lg' ? 'h-14 sm:h-16' : 'h-10')}
+        fill="none"
+      >
         {/* Play icon */}
         <path d="M20.1 18.6 20 20v40l.2 1.4 22-22-22-20.8Z" fill="#4285F4" />
         <path
