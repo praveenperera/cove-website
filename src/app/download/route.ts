@@ -8,5 +8,5 @@ export function GET(request: NextRequest) {
     return NextResponse.redirect(storeUrl)
   }
 
-  return NextResponse.redirect(new URL('/', request.url))
+  return NextResponse.redirect(new URL('/app-stores', request.url))
 }
