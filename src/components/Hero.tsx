@@ -110,7 +110,7 @@ export function Hero() {
               <Button
                 href="https://youtu.be/-iK1DPdlgls"
                 variant="outline"
-                className="ml-2 flex w-auto sm:mt-0"
+                className="flex w-auto sm:mt-0"
               >
                 <PlayIcon className="h-6 w-6 flex-none" />
                 <span className="ml-2.5">Watch the video</span>
