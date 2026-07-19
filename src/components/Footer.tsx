@@ -3,13 +3,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
+import { QRCodeSVG } from 'qrcode.react'
 
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { DonateModal } from '@/components/DonateModal'
 import { NavLinks } from '@/components/NavLinks'
 import logo from '@/images/cove_logo.jpg'
-import qrCode from '@/images/qr-code.svg'
+
+const downloadUrl = 'https://covebitcoinwallet.com/download'
 
 function QrCodeBorder(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -47,11 +49,11 @@ export function Footer() {
           <div className="group relative -mx-4 flex items-center self-stretch p-4 transition-colors hover:bg-gray-100 sm:self-auto sm:rounded-2xl lg:mx-0 lg:self-auto lg:p-6">
             <div className="relative flex h-24 w-24 flex-none items-center justify-center">
               <QrCodeBorder className="absolute inset-0 h-full w-full stroke-gray-300 transition-colors group-hover:stroke-midnight-blue-600" />
-              <Image src={qrCode} alt="" unoptimized />
+              <QRCodeSVG value={downloadUrl} size={80} marginSize={1} />
             </div>
             <div className="ml-8 lg:w-64">
               <p className="text-base font-semibold text-gray-900">
-                <Link href="https://apps.apple.com/app/cove-simple-bitcoin-wallet/id6642680364">
+                <Link href="/download">
                   <span className="absolute inset-0 sm:rounded-2xl" />
                   Download the app
                 </Link>
