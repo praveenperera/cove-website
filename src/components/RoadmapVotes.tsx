@@ -1,11 +1,11 @@
 'use client'
 
-import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 
 import { Container } from '@/components/Container'
 import { FeatureVoteModal } from '@/components/FeatureVoteModal'
+import { usePendingCheckoutRecovery } from '@/hooks/usePendingCheckoutRecovery'
 import { displayName, formatSats } from '@/lib/feature-votes/format'
 import type { Feature, FeatureCardProps } from '@/lib/feature-votes/types'
 
@@ -80,7 +80,7 @@ function SkeletonCards() {
   )
 }
 
-export function RoadmapVotes() {
+export function RoadmapVotes({ apiOrigin = '' }: { apiOrigin?: string }) {
   const [features, setFeatures] = useState<Feature[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
@@ -88,7 +88,7 @@ export function RoadmapVotes() {
   const [modalOpen, setModalOpen] = useState(false)
 
   const loadLeaderboard = useCallback(async () => {
-    const res = await fetch('/api/feature-votes/leaderboard', {
+    const res = await fetch(`${apiOrigin}/api/feature-votes/leaderboard`, {
       cache: 'no-store',
     })
 
@@ -99,7 +99,7 @@ export function RoadmapVotes() {
     }
 
     return json.features ?? []
-  }, [])
+  }, [apiOrigin])
 
   const fetchLeaderboard = useCallback(async () => {
     setLoading(true)
@@ -113,6 +113,8 @@ export function RoadmapVotes() {
       setLoading(false)
     }
   }, [features.length, loadLeaderboard])
+
+  usePendingCheckoutRecovery(fetchLeaderboard, apiOrigin)
 
   useEffect(() => {
     let cancelled = false
@@ -227,13 +229,13 @@ export function RoadmapVotes() {
         )}
 
         <div className="mt-10 flex justify-center">
-          <Link
-            href="/roadmap"
+          <a
+            href="https://roadmap.covebitcoinwallet.com/"
             className="inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100"
           >
             View Full Roadmap
             <span aria-hidden="true">→</span>
-          </Link>
+          </a>
         </div>
       </Container>
 
@@ -250,6 +252,7 @@ export function RoadmapVotes() {
             name: selectedFeature.name,
             description: selectedFeature.description,
           }}
+          apiOrigin={apiOrigin}
           onVoteRecorded={fetchLeaderboard}
         />
       )}

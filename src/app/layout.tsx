@@ -12,18 +12,18 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://covebitcoinwallet.com'),
+  metadataBase: new URL('https://roadmap.covebitcoinwallet.com'),
   title: {
     template: '%s - Cove',
-    default: 'Cove - The simple bitcoin only mobile wallet',
+    default: 'Cove Roadmap - Vote on what Cove builds next',
   },
   description:
-    'Cove is a Bitcoin only mobile wallet that is simple to use, but feature rich.',
+    'Vote with sats on the features you want Cove Bitcoin Wallet to build next.',
   openGraph: {
-    title: 'Cove - The simple bitcoin only mobile wallet',
+    title: 'Cove Roadmap - Vote on what Cove builds next',
     description:
-      'Cove is a Bitcoin only mobile wallet that is simple to use, but feature rich.',
-    url: 'https://covebitcoinwallet.com',
+      'Vote with sats on the features you want Cove Bitcoin Wallet to build next.',
+    url: 'https://roadmap.covebitcoinwallet.com',
     siteName: 'Cove',
     images: [
       {
@@ -47,9 +47,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Cove - The simple bitcoin only mobile wallet',
+    title: 'Cove Roadmap - Vote on what Cove builds next',
     description:
-      'Cove is a Bitcoin only mobile wallet that is simple to use, but feature rich.',
+      'Vote with sats on the features you want Cove Bitcoin Wallet to build next.',
     images: ['/og_square.jpg'],
     creator: '@praveenperera',
     site: '@covewallet',

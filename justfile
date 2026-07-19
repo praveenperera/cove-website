@@ -63,7 +63,7 @@ db-migrate:
 # Run all CI checks
 [group('ci')]
 ci:
-    just fmt-check && just lint && just build
+    just fmt-check && npm run test && npm run check:site && just lint && just build
 
 # ---------- aliases ----------
 

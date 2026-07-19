@@ -1,0 +1,48 @@
+---
+import '../../../../src/styles/tailwind.css'
+
+type Props = {
+  title?: string
+  description?: string
+}
+
+const {
+  title = 'Cove - The simple bitcoin only mobile wallet',
+  description = 'Cove is a Bitcoin only mobile wallet that is simple to use, but feature rich.',
+} = Astro.props
+const canonical = new URL(Astro.url.pathname, Astro.site)
+---
+
+<!doctype html>
+<html lang="en" class="bg-gray-50 antialiased">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Cove" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta
+      property="og:image"
+      content="https://covebitcoinwallet.com/og_horizontal.jpg"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@praveenperera" />
+    <meta name="twitter:site" content="@covewallet" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta
+      name="twitter:image"
+      content="https://covebitcoinwallet.com/og_square.jpg"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

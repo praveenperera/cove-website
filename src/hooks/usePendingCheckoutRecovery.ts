@@ -1,9 +1,18 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { confirmCheckout } from '@/lib/feature-votes/confirm-checkout'
 import { getPendingCheckouts } from '@/lib/feature-votes/pending-checkouts'
 
-export function usePendingCheckoutRecovery(onRecovered?: () => void) {
+export function usePendingCheckoutRecovery(
+  onRecovered?: () => void,
+  apiOrigin = '',
+) {
+  const onRecoveredRef = useRef(onRecovered)
+
+  useEffect(() => {
+    onRecoveredRef.current = onRecovered
+  }, [onRecovered])
+
   useEffect(() => {
     const pending = getPendingCheckouts()
     if (pending.length === 0) return
@@ -11,7 +20,7 @@ export function usePendingCheckoutRecovery(onRecovered?: () => void) {
     console.log(`recovering ${pending.length} pending checkout(s)`)
 
     const promises = pending.map(({ checkoutId }) =>
-      confirmCheckout(checkoutId),
+      confirmCheckout(checkoutId, apiOrigin),
     )
 
     Promise.allSettled(promises).then((results) => {
@@ -21,8 +30,8 @@ export function usePendingCheckoutRecovery(onRecovered?: () => void) {
 
       if (recovered > 0) {
         console.log(`recovered ${recovered} vote(s)`)
-        onRecovered?.()
+        onRecoveredRef.current?.()
       }
     })
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [apiOrigin])
 }

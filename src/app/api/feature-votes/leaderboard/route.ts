@@ -1,11 +1,24 @@
-import { NextResponse } from 'next/server'
+import {
+  corsJson,
+  corsOptions,
+  rejectDisallowedBrowserOrigin,
+} from '@/lib/cors'
 
 import {
   getVoteTotalsByProductId,
   listFeatureProducts,
 } from '@/lib/feature-votes/server'
 
-export async function GET() {
+const methods = ['GET', 'OPTIONS'] as const
+
+export function OPTIONS(request: Request) {
+  return corsOptions(request, methods)
+}
+
+export async function GET(request: Request) {
+  const rejection = rejectDisallowedBrowserOrigin(request, methods)
+  if (rejection) return rejection
+
   try {
     const products = await listFeatureProducts()
     const totals = await getVoteTotalsByProductId(
@@ -30,13 +43,15 @@ export async function GET() {
         return a.name.localeCompare(b.name)
       })
 
-    return NextResponse.json({
+    return corsJson(request, methods, {
       generatedAt: new Date().toISOString(),
       features,
     })
   } catch (error) {
     console.error('feature vote leaderboard failed:', error)
-    return NextResponse.json(
+    return corsJson(
+      request,
+      methods,
       {
         error: 'Failed to load feature leaderboard',
       },

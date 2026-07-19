@@ -5,16 +5,18 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const configDir = path.dirname(fileURLToPath(import.meta.url))
+const siteOrigin =
+  process.env.COVE_SITE_ORIGIN ?? 'https://covebitcoinwallet.com'
 
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
-  "connect-src 'self' https://*.vercel-insights.com https://vitals.vercel-insights.com",
+  `connect-src 'self' ${siteOrigin} https://*.vercel-insights.com https://vitals.vercel-insights.com`,
   "font-src 'self' https://fonts.gstatic.com",
   "form-action 'self'",
   "frame-ancestors 'none'",
   "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com",
-  "img-src 'self' data: blob:",
+  `img-src 'self' data: blob: ${siteOrigin}`,
   "object-src 'none'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.vercel-insights.com https://vitals.vercel-insights.com",
   "style-src 'self' 'unsafe-inline'",
@@ -42,6 +44,7 @@ const nextConfig = {
   turbopack: {
     root: configDir,
   },
+  allowedDevOrigins: ['localhost:4321'],
   async headers() {
     return [
       {
@@ -56,6 +59,26 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      {
+        source: '/app-stores',
+        destination: `${siteOrigin}/app-stores`,
+        permanent: true,
+      },
+      {
+        source: '/download',
+        destination: `${siteOrigin}/download`,
+        permanent: true,
+      },
+      {
+        source: '/privacy',
+        destination: `${siteOrigin}/privacy`,
+        permanent: true,
+      },
+      {
+        source: '/terms',
+        destination: `${siteOrigin}/terms`,
+        permanent: true,
+      },
       {
         source: '/appstore',
         destination:
@@ -86,8 +109,13 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/roadmap',
+        destination: '/',
+        permanent: true,
+      },
+      {
         source: '/next-features',
-        destination: '/roadmap',
+        destination: '/',
         permanent: true,
       },
     ]

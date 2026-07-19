@@ -1,0 +1,15 @@
+---
+import AppStores from '@/app/(main)/app-stores/page'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
+import SiteLayout from '../layouts/SiteLayout.astro'
+---
+
+<SiteLayout
+  title="Download Cove"
+  description="Download Cove for iOS or Android."
+>
+  <Header client:load />
+  <main class="flex-auto"><AppStores /></main>
+  <Footer client:visible apiOrigin="https://roadmap.covebitcoinwallet.com" />
+</SiteLayout>

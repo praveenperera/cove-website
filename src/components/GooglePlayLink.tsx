@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import clsx from 'clsx'
 
 export function GooglePlayLink({
@@ -11,7 +10,7 @@ export function GooglePlayLink({
   const textFill = color === 'black' ? '#fff' : '#111827'
 
   return (
-    <Link
+    <a
       href="https://play.google.com/store/apps/details?id=org.bitcoinppl.cove"
       aria-label="Get it on Google Play"
       className={clsx(
@@ -99,6 +98,6 @@ export function GooglePlayLink({
           fill={textFill}
         />
       </svg>
-    </Link>
+    </a>
   )
 }

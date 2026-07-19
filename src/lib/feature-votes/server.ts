@@ -1,6 +1,8 @@
 import { createClient, type Client } from '@libsql/client'
 import { POST as mdkPost } from '@moneydevkit/nextjs/server/route'
 
+import { isPaidCheckoutStatus } from '@/lib/checkout-status'
+
 export const FEATURE_PRODUCT_PREFIX = 'Feature:'
 
 export type FeatureProduct = {
@@ -147,9 +149,7 @@ export function extractSettledSats(checkout: MdkCheckout): number {
 }
 
 export function isPaidCheckout(checkout: MdkCheckout): boolean {
-  return (
-    checkout.status === 'PAYMENT_RECEIVED' || checkout.status === 'CONFIRMED'
-  )
+  return isPaidCheckoutStatus(checkout.status)
 }
 
 export type FeatureVoteRecordResult = {
@@ -217,10 +217,7 @@ export async function insertFeatureVoteEvent(
 export async function recordPaidFeatureVoteCheckout(
   checkout: MdkCheckout,
 ): Promise<FeatureVoteRecordResult> {
-  const paid =
-    isPaidCheckout(checkout) || (checkout.invoice?.amountSatsReceived ?? 0) > 0
-
-  if (!paid) {
+  if (!isPaidCheckout(checkout)) {
     throw new FeatureVoteRecordError(
       'Checkout is not paid',
       'unpaid',

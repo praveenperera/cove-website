@@ -1,4 +1,8 @@
-import { NextResponse } from 'next/server'
+import {
+  corsJson,
+  corsOptions,
+  rejectDisallowedBrowserOrigin,
+} from '@/lib/cors'
 
 import {
   callMdk,
@@ -11,13 +15,27 @@ type CreateCheckoutBody = {
   amountSats?: unknown
 }
 
+const methods = ['POST', 'OPTIONS'] as const
+
+export function OPTIONS(request: Request) {
+  return corsOptions(request, methods)
+}
+
 export async function POST(request: Request) {
+  const rejection = rejectDisallowedBrowserOrigin(request, methods)
+  if (rejection) return rejection
+
   let body: CreateCheckoutBody
 
   try {
     body = await request.json()
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+    return corsJson(
+      request,
+      methods,
+      { error: 'Invalid JSON body' },
+      { status: 400 },
+    )
   }
 
   const productId =
@@ -26,14 +44,18 @@ export async function POST(request: Request) {
     typeof body.amountSats === 'number' ? Math.round(body.amountSats) : NaN
 
   if (!productId) {
-    return NextResponse.json(
+    return corsJson(
+      request,
+      methods,
       { error: 'productId is required' },
       { status: 400 },
     )
   }
 
   if (!Number.isFinite(amountSats) || amountSats < 1) {
-    return NextResponse.json(
+    return corsJson(
+      request,
+      methods,
       { error: 'amountSats must be an integer greater than 0' },
       { status: 400 },
     )
@@ -43,7 +65,9 @@ export async function POST(request: Request) {
     const product = await getFeatureProductById(productId)
 
     if (!product) {
-      return NextResponse.json(
+      return corsJson(
+        request,
+        methods,
         { error: 'Feature product not found' },
         { status: 404 },
       )
@@ -54,7 +78,9 @@ export async function POST(request: Request) {
     )
 
     if (!supportsSatCustom) {
-      return NextResponse.json(
+      return corsJson(
+        request,
+        methods,
         {
           error:
             'This product does not support custom SAT pricing. Configure a SAT CUSTOM price in MDK.',
@@ -68,7 +94,7 @@ export async function POST(request: Request) {
       params: {
         type: 'PRODUCTS',
         product: product.id,
-        successUrl: '/roadmap',
+        successUrl: '/',
         metadata: {
           voteType: 'feature',
           featureProductId: product.id,
@@ -79,7 +105,9 @@ export async function POST(request: Request) {
     const checkoutId = createResponse.data?.id
 
     if (!checkoutId) {
-      return NextResponse.json(
+      return corsJson(
+        request,
+        methods,
         { error: 'MDK create_checkout did not return a checkout id' },
         { status: 502 },
       )
@@ -101,13 +129,15 @@ export async function POST(request: Request) {
     const checkout = confirmResponse.data
 
     if (!checkout?.invoice?.invoice || !checkout.invoice.expiresAt) {
-      return NextResponse.json(
+      return corsJson(
+        request,
+        methods,
         { error: 'MDK confirm_checkout did not return an invoice' },
         { status: 502 },
       )
     }
 
-    return NextResponse.json({
+    return corsJson(request, methods, {
       data: {
         checkoutId: checkout.id,
         invoice: checkout.invoice.invoice,
@@ -122,7 +152,9 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     console.error('feature vote create-checkout failed:', error)
-    return NextResponse.json(
+    return corsJson(
+      request,
+      methods,
       {
         error: 'Failed to create feature vote checkout',
       },

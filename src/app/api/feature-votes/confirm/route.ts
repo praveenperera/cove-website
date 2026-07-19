@@ -1,4 +1,8 @@
-import { NextResponse } from 'next/server'
+import {
+  corsJson,
+  corsOptions,
+  rejectDisallowedBrowserOrigin,
+} from '@/lib/cors'
 
 import {
   callMdk,
@@ -11,20 +15,36 @@ type ConfirmBody = {
   checkoutId?: unknown
 }
 
+const methods = ['POST', 'OPTIONS'] as const
+
+export function OPTIONS(request: Request) {
+  return corsOptions(request, methods)
+}
+
 export async function POST(request: Request) {
+  const rejection = rejectDisallowedBrowserOrigin(request, methods)
+  if (rejection) return rejection
+
   let body: ConfirmBody
 
   try {
     body = await request.json()
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+    return corsJson(
+      request,
+      methods,
+      { error: 'Invalid JSON body' },
+      { status: 400 },
+    )
   }
 
   const checkoutId =
     typeof body.checkoutId === 'string' ? body.checkoutId.trim() : ''
 
   if (!checkoutId) {
-    return NextResponse.json(
+    return corsJson(
+      request,
+      methods,
       { error: 'checkoutId is required' },
       { status: 400 },
     )
@@ -39,33 +59,45 @@ export async function POST(request: Request) {
     const checkout = checkoutResponse.data
 
     if (!checkout) {
-      return NextResponse.json({ error: 'Checkout not found' }, { status: 404 })
+      return corsJson(
+        request,
+        methods,
+        { error: 'Checkout not found' },
+        { status: 404 },
+      )
     }
 
     try {
       const recorded = await recordPaidFeatureVoteCheckout(checkout)
 
-      return NextResponse.json({
+      return corsJson(request, methods, {
         accepted: true,
         ...recorded,
       })
     } catch (error) {
       if (error instanceof FeatureVoteRecordError && error.code === 'unpaid') {
-        return NextResponse.json({
+        return corsJson(request, methods, {
           accepted: false,
           status: error.status,
         })
       }
 
       if (error instanceof FeatureVoteRecordError) {
-        return NextResponse.json({ error: error.message }, { status: 400 })
+        return corsJson(
+          request,
+          methods,
+          { error: error.message },
+          { status: 400 },
+        )
       }
 
       throw error
     }
   } catch (error) {
     console.error('feature vote confirm failed:', error)
-    return NextResponse.json(
+    return corsJson(
+      request,
+      methods,
       {
         error: 'Failed to confirm feature vote',
       },

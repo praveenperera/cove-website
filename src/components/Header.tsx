@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import {
   Popover,
   PopoverButton,
@@ -42,15 +41,10 @@ function ChevronUpIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   )
 }
 
-function MobileNavLink(
-  props: Omit<
-    React.ComponentPropsWithoutRef<typeof PopoverButton<typeof Link>>,
-    'as' | 'className'
-  >,
-) {
+function MobileNavLink(props: React.ComponentPropsWithoutRef<'a'>) {
   return (
     <PopoverButton
-      as={Link}
+      as="a"
       className="block text-base/7 tracking-tight text-gray-700"
       {...props}
     />
@@ -63,9 +57,9 @@ export function Header() {
       <nav>
         <Container className="relative z-50 flex justify-between py-8">
           <div className="relative z-10 flex items-center gap-16">
-            <Link href="/" aria-label="Home">
+            <a href="https://covebitcoinwallet.com/" aria-label="Home">
               <Logo />
-            </Link>
+            </a>
             <div className="hidden lg:flex lg:gap-10">
               <NavLinks />
             </div>
@@ -110,10 +104,10 @@ export function Header() {
                           className="absolute inset-x-0 top-0 z-0 origin-top rounded-b-2xl bg-gray-50 px-6 pt-32 pb-6 shadow-2xl shadow-gray-900/20"
                         >
                           <div className="space-y-4">
-                            <MobileNavLink href="/#features">
+                            <MobileNavLink href="https://covebitcoinwallet.com/#features">
                               Features
                             </MobileNavLink>
-                            <MobileNavLink href="/roadmap">
+                            <MobileNavLink href="https://roadmap.covebitcoinwallet.com/">
                               Vote Roadmap
                             </MobileNavLink>
                           </div>

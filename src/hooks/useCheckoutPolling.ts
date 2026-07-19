@@ -1,19 +1,18 @@
 import { useEffect, useRef, useSyncExternalStore } from 'react'
 
-import { postMdk } from '@/lib/mdk-client'
+import { paymentApiUrl, readJson } from '@/lib/payments-client'
 
 type MdkCheckoutStatus = {
-  data: {
-    status: string
-    invoice?: { amountSatsReceived?: number | null } | null
-  }
+  status: string
 }
 
 type UseCheckoutPollingOptions = {
   checkoutId: string | null
   active: boolean
+  apiOrigin?: string
   onPaid: () => void | Promise<void>
   onExpired: () => void
+  onError?: (message: string) => void
 }
 
 function subscribeToVisibility(callback: () => void) {
@@ -32,11 +31,14 @@ function getServerVisibility() {
 export function useCheckoutPolling({
   checkoutId,
   active,
+  apiOrigin = '',
   onPaid,
   onExpired,
+  onError,
 }: UseCheckoutPollingOptions) {
   const onPaidRef = useRef(onPaid)
   const onExpiredRef = useRef(onExpired)
+  const onErrorRef = useRef(onError)
 
   useEffect(() => {
     onPaidRef.current = onPaid
@@ -44,6 +46,9 @@ export function useCheckoutPolling({
   useEffect(() => {
     onExpiredRef.current = onExpired
   }, [onExpired])
+  useEffect(() => {
+    onErrorRef.current = onError
+  }, [onError])
 
   const visible = useSyncExternalStore(
     subscribeToVisibility,
@@ -57,27 +62,30 @@ export function useCheckoutPolling({
     if (!enabled || !checkoutId) return
 
     let cancelled = false
+    let timeout: ReturnType<typeof setTimeout> | undefined
+    let failedAttempts = 0
 
     const poll = async () => {
       if (cancelled) return
       try {
-        const { data } = await postMdk<MdkCheckoutStatus>('get_checkout', {
-          checkoutId,
-        })
+        const response = await fetch(
+          paymentApiUrl(
+            apiOrigin,
+            `/api/checkouts/${encodeURIComponent(checkoutId)}/status`,
+          ),
+          { cache: 'no-store' },
+        )
+        const data = await readJson<MdkCheckoutStatus>(response)
 
         if (cancelled) return
+        failedAttempts = 0
 
-        if (data.status === 'EXPIRED') {
+        if (data.status === 'EXPIRED' || data.status === 'CANCELLED') {
           onExpiredRef.current()
           return
         }
 
-        const paid =
-          data.status === 'PAYMENT_RECEIVED' ||
-          data.status === 'CONFIRMED' ||
-          (data.invoice?.amountSatsReceived ?? 0) > 0
-
-        if (paid) {
+        if (data.status === 'PAYMENT_RECEIVED') {
           try {
             await onPaidRef.current()
           } catch (error) {
@@ -85,17 +93,28 @@ export function useCheckoutPolling({
           }
           return
         }
-      } catch {
-        // ignore polling errors
+      } catch (error) {
+        failedAttempts += 1
+        if (failedAttempts === 3) {
+          onErrorRef.current?.(
+            error instanceof Error
+              ? error.message
+              : 'Unable to check payment status',
+          )
+        }
       }
 
-      if (!cancelled) setTimeout(poll, 500)
+      if (!cancelled) {
+        const delay = Math.min(1000 * 2 ** failedAttempts, 10_000)
+        timeout = setTimeout(poll, delay)
+      }
     }
 
     poll()
 
     return () => {
       cancelled = true
+      if (timeout) clearTimeout(timeout)
     }
-  }, [enabled, checkoutId])
+  }, [apiOrigin, checkoutId, enabled])
 }

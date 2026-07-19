@@ -1,7 +1,5 @@
 'use client'
 
-import Image from 'next/image'
-import Link from 'next/link'
 import { useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 
@@ -9,7 +7,6 @@ import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { DonateModal } from '@/components/DonateModal'
 import { NavLinks } from '@/components/NavLinks'
-import logo from '@/images/cove_logo.jpg'
 
 const downloadUrl = 'https://covebitcoinwallet.com/download'
 
@@ -25,7 +22,7 @@ function QrCodeBorder(props: React.ComponentPropsWithoutRef<'svg'>) {
   )
 }
 
-export function Footer() {
+export function Footer({ apiOrigin = '' }: { apiOrigin?: string }) {
   const [showDonate, setShowDonate] = useState(false)
 
   return (
@@ -34,7 +31,13 @@ export function Footer() {
         <div className="flex flex-col items-start justify-between gap-y-12 pt-16 pb-6 lg:flex-row lg:items-center lg:py-16">
           <div>
             <div className="flex items-center text-gray-900">
-              <Image src={logo} alt="" width={40} className="mr-4" />
+              <img
+                src="/cove_logo.jpg"
+                alt=""
+                width={40}
+                height={40}
+                className="mr-4"
+              />
               <div className="ml-4">
                 <p className="text-base font-semibold">Cove</p>
                 <p className="mt-1 text-sm">
@@ -53,10 +56,10 @@ export function Footer() {
             </div>
             <div className="ml-8 lg:w-64">
               <p className="text-base font-semibold text-gray-900">
-                <Link href="/download">
+                <a href="https://covebitcoinwallet.com/download">
                   <span className="absolute inset-0 sm:rounded-2xl" />
                   Download the app
-                </Link>
+                </a>
               </p>
               <p className="mt-1 text-sm text-gray-700">
                 Scan the QR code to download the app.
@@ -67,13 +70,19 @@ export function Footer() {
         <div className="flex flex-col items-center border-t border-gray-200 pt-8 pb-12 md:flex-row-reverse md:justify-between md:pt-6">
           <p className="mt-6 text-sm text-gray-500 md:mt-0">
             &copy; Copyright {new Date().getFullYear()}. All rights reserved.{' '}
-            <Link href="/terms" className="underline hover:text-gray-700">
+            <a
+              href="https://covebitcoinwallet.com/terms"
+              className="underline hover:text-gray-700"
+            >
               Terms
-            </Link>{' '}
+            </a>{' '}
             &middot;{' '}
-            <Link href="/privacy" className="underline hover:text-gray-700">
+            <a
+              href="https://covebitcoinwallet.com/privacy"
+              className="underline hover:text-gray-700"
+            >
               Privacy
-            </Link>{' '}
+            </a>{' '}
             &middot;{' '}
             <a
               href="mailto:support@covebitcoinwallet.com"
@@ -103,7 +112,11 @@ export function Footer() {
         </div>
       </Container>
 
-      <DonateModal open={showDonate} onClose={() => setShowDonate(false)} />
+      <DonateModal
+        open={showDonate}
+        onClose={() => setShowDonate(false)}
+        apiOrigin={apiOrigin}
+      />
     </footer>
   )
 }

@@ -1,4 +1,7 @@
 .next
+apps/site/dist
+apps/site/.astro
+apps/site/worker-configuration.d.ts
 node_modules
 .env
 .dev.vars

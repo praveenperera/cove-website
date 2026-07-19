@@ -354,11 +354,7 @@ export default function NextFeaturesPage() {
 
         {!loading && !error && features.length === 0 && (
           <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center text-gray-600">
-            No feature products found. Create MDK products prefixed with
-            <span className="mx-1 rounded bg-gray-100 px-1.5 py-0.5 font-mono text-xs">
-              Feature:
-            </span>
-            to populate this page.
+            No roadmap features are available yet. Check back soon.
           </div>
         )}
 
