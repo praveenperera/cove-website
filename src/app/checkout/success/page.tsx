@@ -1,7 +1,6 @@
 'use client'
 
 import { useCheckoutSuccess } from '@moneydevkit/nextjs'
-import Link from 'next/link'
 
 export default function SuccessPage() {
   const { isCheckoutPaidLoading, isCheckoutPaid } = useCheckoutSuccess()
@@ -27,12 +26,12 @@ export default function SuccessPage() {
       <p className="text-2xl font-semibold text-gray-900">
         Thank you for your donation!
       </p>
-      <Link
-        href="/"
+      <a
+        href="https://covebitcoinwallet.com/"
         className="text-midnight-blue-600 underline hover:text-midnight-blue-700"
       >
         Back to home
-      </Link>
+      </a>
     </div>
   )
 }

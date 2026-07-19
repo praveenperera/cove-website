@@ -1,6 +1,3 @@
-import Image from 'next/image'
-import coveLogoFull from '@/images/cove_logo_full.png'
-
 export function Logomark(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg viewBox="0 0 40 40" aria-hidden="true" {...props}>
@@ -14,5 +11,7 @@ export function Logomark(props: React.ComponentPropsWithoutRef<'svg'>) {
 }
 
 export function Logo() {
-  return <Image src={coveLogoFull} width={100} alt="Cove Logo" />
+  return (
+    <img src="/cove_logo_full.png" width={100} height={41} alt="Cove Logo" />
+  )
 }

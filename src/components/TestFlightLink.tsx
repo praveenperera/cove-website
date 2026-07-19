@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 type Args = {
   color?: 'black' | 'white' | 'blue'
   className?: string
@@ -23,7 +21,7 @@ function buttonColor(color: string): string {
 
 export function TestFlightLink({ color = 'black', className = '' }: Args) {
   return (
-    <Link
+    <a
       href="https://TestFlight.apple.com/join/pDxFQsxF"
       aria-label="Join TestFlight Beta"
       className={`inline-flex w-full items-center space-x-2 rounded-lg px-4 py-2 text-center font-semibold sm:w-auto ${buttonColor(color)} ${className}`}
@@ -36,6 +34,6 @@ export function TestFlightLink({ color = 'black', className = '' }: Args) {
         <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
       </svg>
       <span className="w-full sm:w-auto">Join TestFlight Beta</span>
-    </Link>
+    </a>
   )
 }

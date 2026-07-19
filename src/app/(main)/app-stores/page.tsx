@@ -1,5 +1,4 @@
 import { type Metadata } from 'next'
-import Link from 'next/link'
 
 import { AppStoreLink } from '@/components/AppStoreLink'
 import { Container } from '@/components/Container'
@@ -15,9 +14,9 @@ export default function AppStoresPage() {
   return (
     <Container className="py-20 sm:py-28">
       <div className="mx-auto flex max-w-lg flex-col items-center text-center">
-        <Link href="/" aria-label="Cove home">
+        <a href="/" aria-label="Cove home">
           <Logo />
-        </Link>
+        </a>
 
         <h1 className="mt-10 text-3xl font-medium tracking-tight text-gray-900 sm:text-4xl">
           Download Cove
@@ -31,12 +30,12 @@ export default function AppStoresPage() {
           <GooglePlayLink size="lg" />
         </div>
 
-        <Link
+        <a
           href="/"
           className="mt-12 text-sm font-medium text-gray-600 underline-offset-4 hover:text-gray-900 hover:underline"
         >
           Back to home
-        </Link>
+        </a>
       </div>
     </Container>
   )

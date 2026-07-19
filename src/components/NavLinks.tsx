@@ -1,20 +1,18 @@
 'use client'
 
-import Link from 'next/link'
-
 export function NavLinks() {
   const links = [
-    ['Features', '/#features'],
-    ['Vote Roadmap', '/roadmap'],
+    ['Features', 'https://covebitcoinwallet.com/#features'],
+    ['Vote Roadmap', 'https://roadmap.covebitcoinwallet.com/'],
   ] as const
 
   return links.map(([label, href]) => (
-    <Link
+    <a
       key={label}
       href={href}
       className="text-sm text-gray-700 transition-colors hover:text-gray-900"
     >
       {label}
-    </Link>
+    </a>
   ))
 }

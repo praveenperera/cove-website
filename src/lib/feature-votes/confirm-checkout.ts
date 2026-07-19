@@ -1,4 +1,5 @@
 import { removePendingCheckout } from './pending-checkouts'
+import { paymentApiUrl } from '../payments-client'
 
 const inflight = new Map<string, Promise<boolean>>()
 
@@ -8,16 +9,22 @@ const MAX_ATTEMPTS = 10
 const INITIAL_DELAY_MS = 500
 const MAX_DELAY_MS = 10_000
 
-async function attemptConfirm(checkoutId: string): Promise<boolean> {
+async function attemptConfirm(
+  checkoutId: string,
+  apiOrigin: string,
+): Promise<boolean> {
   let delay = INITIAL_DELAY_MS
 
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
     try {
-      const res = await fetch('/api/feature-votes/confirm', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ checkoutId }),
-      })
+      const res = await fetch(
+        paymentApiUrl(apiOrigin, '/api/feature-votes/confirm'),
+        {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ checkoutId }),
+        },
+      )
 
       // permanent errors, stop retrying
       if (res.status === 404 || res.status === 400) {
@@ -57,14 +64,18 @@ async function attemptConfirm(checkoutId: string): Promise<boolean> {
   return false
 }
 
-export function confirmCheckout(checkoutId: string): Promise<boolean> {
-  const existing = inflight.get(checkoutId)
+export function confirmCheckout(
+  checkoutId: string,
+  apiOrigin = '',
+): Promise<boolean> {
+  const key = `${apiOrigin}:${checkoutId}`
+  const existing = inflight.get(key)
   if (existing) return existing
 
-  const promise = attemptConfirm(checkoutId).finally(() => {
-    inflight.delete(checkoutId)
+  const promise = attemptConfirm(checkoutId, apiOrigin).finally(() => {
+    inflight.delete(key)
   })
 
-  inflight.set(checkoutId, promise)
+  inflight.set(key, promise)
   return promise
 }

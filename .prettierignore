@@ -1,1 +1,4 @@
 next-env.d.ts
+apps/site/.astro
+apps/site/dist
+apps/site/worker-configuration.d.ts

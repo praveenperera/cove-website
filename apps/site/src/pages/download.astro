@@ -1,0 +1,27 @@
+---
+import { AppStoreLink } from '@/components/AppStoreLink'
+import { GooglePlayLink } from '@/components/GooglePlayLink'
+import { StoreRedirect } from '@/components/StoreRedirect'
+import SiteLayout from '../layouts/SiteLayout.astro'
+---
+
+<SiteLayout
+  title="Download Cove"
+  description="Download Cove for iOS or Android."
+>
+  <main
+    class="mx-auto flex min-h-screen max-w-lg flex-col items-center justify-center px-6 text-center"
+  >
+    <StoreRedirect client:load />
+    <h1 class="text-3xl font-medium tracking-tight text-gray-900">
+      Download Cove
+    </h1>
+    <p class="mt-4 text-lg text-gray-600">
+      Choose your app store to download Cove.
+    </p>
+    <div class="mt-10 flex flex-col items-center gap-5 sm:flex-row sm:gap-6">
+      <AppStoreLink size="lg" />
+      <GooglePlayLink size="lg" />
+    </div>
+  </main>
+</SiteLayout>

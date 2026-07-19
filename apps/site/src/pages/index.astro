@@ -1,0 +1,23 @@
+---
+import { CallToAction } from '@/components/CallToAction'
+import { Features } from '@/components/Features'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
+import { Hero } from '@/components/Hero'
+import { RoadmapVotes } from '@/components/RoadmapVotes'
+import SiteLayout from '../layouts/SiteLayout.astro'
+---
+
+<SiteLayout>
+  <Header client:load />
+  <main class="flex-auto">
+    <Hero />
+    <CallToAction />
+    <Features />
+    <RoadmapVotes
+      client:visible
+      apiOrigin="https://roadmap.covebitcoinwallet.com"
+    />
+  </main>
+  <Footer client:visible apiOrigin="https://roadmap.covebitcoinwallet.com" />
+</SiteLayout>

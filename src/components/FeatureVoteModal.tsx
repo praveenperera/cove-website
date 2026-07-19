@@ -12,6 +12,7 @@ import {
   removePendingCheckout,
 } from '@/lib/feature-votes/pending-checkouts'
 import type { Feature } from '@/lib/feature-votes/types'
+import { paymentApiUrl, readJson } from '@/lib/payments-client'
 
 const SAT_PRESETS = [1000, 5000, 10000, 25000, 100000]
 
@@ -28,6 +29,7 @@ type FeatureVoteModalProps = {
   onClose: () => void
   feature: Pick<Feature, 'productId' | 'name' | 'description'> | null
   onVoteRecorded: () => void
+  apiOrigin?: string
 }
 
 type Step = 'pick' | 'loading' | 'invoice' | 'paid' | 'expired'
@@ -41,6 +43,7 @@ export function FeatureVoteModal({
   onClose,
   feature,
   onVoteRecorded,
+  apiOrigin = '',
 }: FeatureVoteModalProps) {
   const [step, setStep] = useState<Step>('pick')
   const [selectedAmount, setSelectedAmount] = useState(SAT_PRESETS[0])
@@ -60,8 +63,9 @@ export function FeatureVoteModal({
   useCheckoutPolling({
     checkoutId: checkout?.id ?? null,
     active: step === 'invoice' && !!feature,
+    apiOrigin,
     onPaid: async () => {
-      const confirmed = await confirmCheckout(checkout!.id)
+      const confirmed = await confirmCheckout(checkout!.id, apiOrigin)
       setStep('paid')
       if (confirmed) onVoteRecorded()
     },
@@ -69,6 +73,7 @@ export function FeatureVoteModal({
       if (checkout) removePendingCheckout(checkout.id)
       setStep('expired')
     },
+    onError: setError,
   })
 
   useEffect(() => {
@@ -113,18 +118,21 @@ export function FeatureVoteModal({
     setError('')
 
     try {
-      const res = await fetch('/api/feature-votes/create-checkout', {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
+      const res = await fetch(
+        paymentApiUrl(apiOrigin, '/api/feature-votes/create-checkout'),
+        {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            productId: feature.productId,
+            amountSats: amount,
+          }),
         },
-        body: JSON.stringify({
-          productId: feature.productId,
-          amountSats: amount,
-        }),
-      })
+      )
 
-      const json = (await res.json().catch(() => ({}))) as {
+      const json = await readJson<{
         error?: string
         data?: {
           checkoutId: string
@@ -133,11 +141,7 @@ export function FeatureVoteModal({
           fiatAmount: number | null
           expiresAt: string
         }
-      }
-
-      if (!res.ok) {
-        throw new Error(json?.error || 'Failed to create invoice')
-      }
+      }>(res)
 
       if (!json.data) {
         throw new Error('Missing checkout data in API response')
@@ -330,6 +334,11 @@ export function FeatureVoteModal({
                 <p className="mt-3 text-xs text-gray-400">
                   Expires in {timeRemaining}
                 </p>
+                {error && (
+                  <p className="mt-2 text-center text-xs text-amber-700">
+                    {error}. The invoice is still valid; checking will retry.
+                  </p>
+                )}
               </div>
             )}
 

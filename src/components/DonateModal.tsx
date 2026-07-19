@@ -5,7 +5,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useCheckoutPolling } from '@/hooks/useCheckoutPolling'
-import { postMdk } from '@/lib/mdk-client'
+import { paymentApiUrl, readJson } from '@/lib/payments-client'
 
 const USD_PRESETS = [100, 500, 1000, 2500, 5000]
 const SAT_PRESETS = [1000, 5000, 10000, 25000, 100000]
@@ -29,7 +29,7 @@ type CheckoutData = {
   id: string
   invoice: string
   amountSats: number
-  fiatAmount: number
+  fiatAmount: number | null
   currency: string
   expiresAt: string
 }
@@ -43,7 +43,7 @@ type MdkCreatedCheckout = {
   invoice: {
     invoice: string
     amountSats: number | null
-    fiatAmount: number
+    fiatAmount: number | null
     expiresAt: string
   }
 }
@@ -51,11 +51,16 @@ type MdkCreatedCheckout = {
 type DonateModalProps = {
   open: boolean
   onClose: () => void
+  apiOrigin?: string
 }
 
 type Step = 'pick' | 'loading' | 'invoice' | 'paid' | 'expired'
 
-export function DonateModal({ open, onClose }: DonateModalProps) {
+export function DonateModal({
+  open,
+  onClose,
+  apiOrigin = '',
+}: DonateModalProps) {
   const [step, setStep] = useState<Step>('pick')
   const [currency, setCurrency] = useState<Currency>('USD')
   const [selectedAmount, setSelectedAmount] = useState(USD_PRESETS[0])
@@ -80,8 +85,10 @@ export function DonateModal({ open, onClose }: DonateModalProps) {
   useCheckoutPolling({
     checkoutId: checkout?.id ?? null,
     active: step === 'invoice',
+    apiOrigin,
     onPaid: () => setStep('paid'),
     onExpired: () => setStep('expired'),
+    onError: setError,
   })
 
   // countdown timer
@@ -110,19 +117,15 @@ export function DonateModal({ open, onClose }: DonateModalProps) {
     setStep('loading')
 
     try {
-      const { data } = await postMdk<MdkResponse<MdkCreatedCheckout>>(
-        'create_checkout',
+      const response = await fetch(
+        paymentApiUrl(apiOrigin, '/api/donations/create-checkout'),
         {
-          params: {
-            type: 'AMOUNT',
-            title: 'Donate to Cove',
-            description: 'Support the development of Cove bitcoin wallet',
-            amount,
-            currency,
-            successUrl: '/checkout/success',
-          },
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ amount, currency }),
         },
       )
+      const { data } = await readJson<MdkResponse<MdkCreatedCheckout>>(response)
 
       setCheckout({
         id: data.id,
@@ -317,9 +320,11 @@ export function DonateModal({ open, onClose }: DonateModalProps) {
                   <p className="text-2xl font-semibold text-gray-900">
                     {formatSats(checkout.amountSats)} sats
                   </p>
-                  <p className="mt-0.5 text-sm text-gray-400">
-                    {formatUsd(checkout.fiatAmount)} USD
-                  </p>
+                  {typeof checkout.fiatAmount === 'number' && (
+                    <p className="mt-0.5 text-sm text-gray-400">
+                      {formatUsd(checkout.fiatAmount)} USD
+                    </p>
+                  )}
                 </div>
 
                 <div
@@ -380,6 +385,11 @@ export function DonateModal({ open, onClose }: DonateModalProps) {
                 <p className="mt-3 text-xs text-gray-400">
                   Expires in {timeRemaining}
                 </p>
+                {error && (
+                  <p className="mt-2 text-center text-xs text-amber-700">
+                    {error}. The invoice is still valid; checking will retry.
+                  </p>
+                )}
               </div>
             )}
 

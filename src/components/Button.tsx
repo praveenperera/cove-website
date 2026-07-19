@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import clsx from 'clsx'
 
 const baseStyles = {
@@ -22,38 +21,40 @@ const variantStyles = {
   },
 }
 
-type ButtonProps = (
+type VariantProps =
   | {
       variant?: 'solid'
       color?: keyof typeof variantStyles.solid
-      extraClasses?: string
     }
   | {
       variant: 'outline'
       color?: keyof typeof variantStyles.outline
     }
-) &
-  (
-    | Omit<React.ComponentPropsWithoutRef<typeof Link>, 'color'>
-    | (Omit<React.ComponentPropsWithoutRef<'button'>, 'color'> & {
-        href?: undefined
-      })
-  )
 
-export function Button({ className, ...props }: ButtonProps) {
-  props.variant ??= 'solid'
-  props.color ??= 'gray'
+type AnchorButtonProps = VariantProps &
+  Omit<React.ComponentPropsWithoutRef<'a'>, 'color'> & { href: string }
 
+type NativeButtonProps = VariantProps &
+  Omit<React.ComponentPropsWithoutRef<'button'>, 'color'> & { href?: never }
+
+type ButtonProps = AnchorButtonProps | NativeButtonProps
+
+export function Button({
+  className,
+  variant = 'solid',
+  color = 'gray',
+  ...elementProps
+}: ButtonProps) {
   const variantStyle =
-    props.variant === 'outline'
-      ? variantStyles.outline[props.color]
-      : variantStyles.solid[props.color]
+    variant === 'outline'
+      ? variantStyles.outline[color as keyof typeof variantStyles.outline]
+      : variantStyles.solid[color as keyof typeof variantStyles.solid]
 
-  className = clsx(baseStyles[props.variant], variantStyle, className)
+  const classes = clsx(baseStyles[variant], variantStyle, className)
 
-  if (typeof props.href === 'undefined') {
-    return <button className={className} {...props} />
+  if (typeof elementProps.href === 'string') {
+    return <a className={classes} {...elementProps} />
   }
 
-  return <Link className={className} {...props} />
+  return <button className={classes} {...elementProps} />
 }
